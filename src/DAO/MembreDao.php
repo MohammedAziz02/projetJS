@@ -21,12 +21,15 @@ class MembreDao {
     // Static method to create a new member
     public static function createMembre(Membre $membre) {
         try {
+
             if (!isset(self::$db)) {
                 self::initialize();
-            }   
+            }
 
-         $query = "INSERT INTO membre (nom, prenom, adresse, email, telephone) 
-         VALUES (?, ?, ?, ?, ?)";
+         $query = "INSERT INTO membre (nom, prenom, adresse, email, telephone,password) 
+                      VALUES (?, ?, ?, ?, ?,?)";
+
+                      
 
             $stmt = self::$db->prepare($query);
             $stmt->execute([
@@ -34,12 +37,13 @@ class MembreDao {
                 $membre->getPrenom(),
                 $membre->getAdresse(),
                 $membre->getEmail(),
-                $membre->getTelephone()
+                $membre->getTelephone(),
+                $membre->getpassword(),
             ]);
 
-            //return self::$db->lastInsertId();
+            return self::$db->lastInsertId();
         } catch (PDOException $e) {
-            // Handle any errors or exceptions
+            echo "Connection failed: " . $e->getMessage();
             return false;
         }
     }
