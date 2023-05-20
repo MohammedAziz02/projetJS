@@ -8,15 +8,17 @@ class Membre {
     private $adresse;
     private $email;
     private $telephone;
+    private $password;
     
     private $liste_Planinsription=[];
     // Constructor
-    public function __construct($nom, $prenom, $adresse, $email, $telephone) {
+    public function __construct($nom, $prenom, $adresse, $email, $telephone,$password) {
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->adresse = $adresse;
         $this->email = $email;
         $this->telephone = $telephone;
+        $this->password=$password;
     }
 
     // Getters
@@ -27,6 +29,16 @@ class Membre {
     public function getnom() {
         return $this->nom;
     }
+
+    public function getpassword() {
+        return $this->password;
+    }
+
+
+    public function setpassword($password) {
+        $this->password = $password;
+    }
+
 
     public function getprenom() {
         return $this->prenom;

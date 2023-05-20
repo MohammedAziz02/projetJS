@@ -61,7 +61,8 @@ class MembreDao {
                     $result['prenom'],
                     $result['adresse'],
                     $result['email'],
-                    $result['telephone']
+                    $result['telephone'],
+                    $result["password"]
                 );
                 $membre->setid_membre($id);
 
@@ -75,6 +76,43 @@ class MembreDao {
             return null;
         }
     }
+
+
+
+
+    public static function getMembreByEmail($email) {
+        try {
+
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "SELECT * FROM membre WHERE email = ?";
+            $stmt = self::$db->prepare($query);
+            $stmt->execute([$email]);
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                $membre = new Membre(
+                    $result['nom'],
+                    $result['prenom'],
+                    $result['adresse'],
+                    $result['email'],
+                    $result['telephone'],
+                    $result["password"]
+                );
+
+                return $membre;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            return null;
+        }
+    }
+
+
 
     // Static method to update a member
     public static function updateMembre(Membre $membre) {
