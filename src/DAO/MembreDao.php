@@ -27,7 +27,7 @@ class MembreDao {
             }
 
          $query = "INSERT INTO membre (nom, prenom, adresse, email, telephone,password) 
-                      VALUES (?, ?, ?, ?, ?,?)";
+         VALUES (?, ?, ?, ?, ?,?)";
 
                       
 
@@ -38,7 +38,7 @@ class MembreDao {
                 $membre->getAdresse(),
                 $membre->getEmail(),
                 $membre->getTelephone(),
-                $membre->getpassword(),
+                $membre->getpassword()
             ]);
 
             return self::$db->lastInsertId();
@@ -81,9 +81,6 @@ class MembreDao {
         }
     }
 
-
-
-
     public static function getMembreByEmail($email) {
         try {
 
@@ -105,11 +102,45 @@ class MembreDao {
                     $result['telephone'],
                     $result["password"]
                 );
-
+                $membre->setid_membre($result["id_membre"]);
                 return $membre;
             } else {
                 return null;
             }
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    public static function getMembreByAll($word){
+        try {
+
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "SELECT * FROM membre WHERE nom like ? or prenom like ? or adresse like ? 
+            or email like ? or telephone like ? ";
+            $stmt = self::$db->prepare($query);
+            $stmt->execute(["%".$word."%","%".$word."%","%".$word."%","%".$word."%","%".$word."%"]);
+            $membres=array();
+            while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+                if ($result) {
+                    $membre = new Membre(
+                        $result['nom'],
+                        $result['prenom'],
+                        $result['adresse'],
+                        $result['email'],
+                        $result['telephone'],
+                        $result["password"]
+                    );
+                    $membre->setid_membre($result["id_membre"]);
+
+                    array_push($membres,$membre);
+                } 
+            }
+            return $membres;
         } catch (PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
             return null;
