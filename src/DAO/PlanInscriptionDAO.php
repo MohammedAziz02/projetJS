@@ -72,6 +72,40 @@ class PlanInscriptionDAO {
         }
     }
 
+    //
+
+    public static function getPlanInscriptionByAll($word){
+        try {
+
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "SELECT * FROM planInscription WHERE nomPlanInscription like ? 
+            or description like ?
+            or prix like ?";
+            $stmt = self::$db->prepare($query);
+            $stmt->execute(["%".$word."%","%".$word."%","%".$word."%",]);
+            $planInscriptions=array();
+            while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+                if ($result) {
+                    $planInscription = new PlanInscription(
+                        $result['nomPlanInscription'],
+                        $result['description'],
+                        $result['prix']
+                    );
+                    $planInscription->setidPlanInscription($result["idPlanInscription"]);
+
+                    array_push($planInscriptions,$planInscription);
+                } 
+            }
+            return $planInscriptions;
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            return null;
+        }
+    }
+
     // Static method to update a member
     public static function updatePlanInscription(PlanInscription $planInscription) {
         try {

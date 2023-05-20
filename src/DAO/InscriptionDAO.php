@@ -82,6 +82,44 @@ class InscriptionDAO {
         }
     }
 
+    //
+    public static function getInscriptionByAll($word){
+        try {
+
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "SELECT * FROM inscription WHERE id_membre like ? or id_planInscription like ? 
+            or date_inscription like ? 
+            or etat like ?  ";
+            $stmt = self::$db->prepare($query);
+            $stmt->execute(["%".$word."%","%".$word."%","%".$word."%","%".$word."%"]);
+            $inscriptions=array();
+            while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+                if ($result) {
+                    $membre=MembreDAO::getMembreById($result['id_Membre']);
+                    $planInscription=PlanInscriptionDAO::getPlanInscriptionById($result['id_planInscription']);
+                    $inscription = new Inscription(
+                        $membre,
+                        $planInscription,
+                        $result['date_inscription'],
+                        $result['etat']
+                    );
+                    $inscription->setIdInscription($result["id_Inscription"]);
+
+                    array_push($inscriptions,$inscription);
+                } 
+            }
+            return $inscriptions;
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            return null;
+        }
+    }
+
+
+
     // Static method to update a member
     public static function updateInscription(Inscription $inscription) {
         try {
