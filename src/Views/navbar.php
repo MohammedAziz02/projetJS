@@ -5,9 +5,9 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
                 <!-- <li class="nav-item"><a class="nav-link" href="http://localhost/JAVASCRIPT%20PROJECT/index.php" >Home</a></li> -->
-                <li class="nav-item"><a class="nav-link" href=<?php echo "http://" . $_SERVER['SERVER_NAME'] . "/JAVASCRIPT%20PROJECT/index.php"?> >Home</a></li>
-                <li class="nav-item"><a class="nav-link" href=<?php echo "http://" . $_SERVER['SERVER_NAME'] . "/JAVASCRIPT%20PROJECT//src/Views/inscription.php" ?> >Inscription</a></li>
-                <li class="nav-item"><a class="nav-link" href=<?php echo "http://" . $_SERVER['SERVER_NAME'] . "/JAVASCRIPT%20PROJECT//src/Views/connexion.php" ?>>Connexion</a></li>
+                <li class="nav-item"><a class="nav-link" href=<?php echo "http://" . $_SERVER['SERVER_NAME'] . "/projetJS/index.php"?> >Home</a></li>
+                <li class="nav-item"><a class="nav-link" href=<?php echo "http://" . $_SERVER['SERVER_NAME'] . "/projetJS//src/Views/inscription.php" ?> >Inscription</a></li>
+                <li class="nav-item"><a class="nav-link" href=<?php echo "http://" . $_SERVER['SERVER_NAME'] . "/projetJS//src/Views/connexion.php" ?>>Connexion</a></li>
              
             </ul>
         </div>
