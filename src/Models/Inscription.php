@@ -2,22 +2,20 @@
 
 namespace gestionclub\Models;
 
-use DateTime;
 
 class Inscription {
     private $id_inscription;
     private Membre $membre;
     private PlanInscription $plan_inscription;
-    private DateTime $date_inscription;
-    private $etat;
+    private $date_inscription;
+    private $etat=" En attente";
 
     // Constructor
-    public function __construct($id_inscription, $membre, $plan_inscription, $date_inscription, $etat) {
-        $this->id_inscription = $id_inscription;
+    public function __construct( $membre, $plan_inscription, $date_inscription) {
+        
         $this->membre = $membre;
         $this->plan_inscription = $plan_inscription;
         $this->date_inscription = $date_inscription;
-        $this->etat = $etat;
     }
 
     // Getters
@@ -60,6 +58,14 @@ class Inscription {
 
     public function setEtat($etat) {
         $this->etat = $etat;
+    }
+
+    public function __toString(){
+        return "$this->id_inscription \n
+        $this->membre \n
+        $this->plan_inscription \n
+        $this->date_inscription \n
+        $this->etat";
     }
 
    

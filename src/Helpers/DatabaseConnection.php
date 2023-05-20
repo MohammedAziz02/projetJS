@@ -8,7 +8,7 @@ use PDOException;
 
 class DatabaseConnection {
     private static $instance = null;
-    private $conn;
+    private $conn=null;
     private $host = "localhost";
     private $user = "root";
     private $pass = "";

@@ -5,13 +5,13 @@ namespace gestionclub\DAO;
 use PDO;
 use PDOException;
 
-use gestionclub\Models\Membre;
+use gestionclub\Models\PlanInscription;
 use gestionclub\Helpers\DatabaseConnection;
 
 // require __DIR__ . "/../../vendor/autoload.php";
 
 
-class MembreDao {
+class PlanInscriptionDAO {
     private static $db;
 
     private static function initialize() {
@@ -19,25 +19,23 @@ class MembreDao {
     }
 
     // Static method to create a new member
-    public static function createMembre(Membre $membre) {
+    public static function createPlanInscription(PlanInscription $planInscription) {
         try {
             if (!isset(self::$db)) {
                 self::initialize();
             }   
 
-         $query = "INSERT INTO membre (nom, prenom, adresse, email, telephone) 
-         VALUES (?, ?, ?, ?, ?)";
+         $query = "INSERT INTO PlanInscription (nomPlanInscription, description , prix) 
+         VALUES (?, ?, ?)";
 
             $stmt = self::$db->prepare($query);
             $stmt->execute([
-                $membre->getNom(),
-                $membre->getPrenom(),
-                $membre->getAdresse(),
-                $membre->getEmail(),
-                $membre->getTelephone()
+                $planInscription->getNom(),
+                $planInscription->getDescription(),
+                $planInscription->getPrix()
             ]);
 
-            //return self::$db->lastInsertId();
+            return self::$db->lastInsertId();
         } catch (PDOException $e) {
             // Handle any errors or exceptions
             return false;
@@ -45,49 +43,48 @@ class MembreDao {
     }
 
     // Static method to retrieve a member by ID
-    public static function getMembreById($id) {
+    public static function getPlanInscriptionById($id) {
         try {
 
             if (!isset(self::$db)) {
                 self::initialize();
             }
-            $query = "SELECT * FROM membre WHERE id_membre = ?";
+            $query = "SELECT * FROM planInscription WHERE idPlanInscription = ?";
             $stmt = self::$db->prepare($query);
             $stmt->execute([$id]);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($result) {
-                $membre = new Membre(
-                    $result['nom'],
-                    $result['prenom'],
-                    $result['adresse'],
-                    $result['email'],
-                    $result['telephone']
-                );
-                $membre->setid_membre($id);
 
-                return $membre;
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                $planInscription = new PlanInscription(
+                    $result['nomPlanInscription'],
+                    $result['description'],
+                    $result['prix']
+                );
+                $planInscription->setidPlanInscription($id);
+                return $planInscription;
             } else {
                 return null;
             }
         } catch (PDOException $e) {
-            echo "error";
             // Handle any errors or exceptions
             return null;
         }
     }
 
     // Static method to update a member
-    public static function updateMembre(Membre $membre) {
+    public static function updatePlanInscription(PlanInscription $planInscription) {
         try {
-            $query = "UPDATE membre SET nom = ?, prenom = ?, adresse = ?, email = ?, telephone = ? WHERE id_membre = ?";
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "UPDATE PlanInscription SET nomPlanInscription = ?, description = ?, prix = ? WHERE idPlanInscription = ?";
             $stmt = self::$db->prepare($query);
             $stmt->execute([
-                $membre->getNom(),
-                $membre->getPrenom(),
-                $membre->getAdresse(),
-                $membre->getEmail(),
-                $membre->getTelephone(),
-                $membre->getid_membre()
+                $planInscription->getNom(),
+                $planInscription->getDescription(),
+                $planInscription->getPrix(),
+                $planInscription->getidPlanInscription()
             ]);
 
             return true;
@@ -98,12 +95,9 @@ class MembreDao {
     }
 
     // Static method to delete a member
-    public static function deleteMembre($id) {
+    public static function deletePlanInscription($id) {
         try {
-            if (!isset(self::$db)) {
-                self::initialize();
-            }
-            $query = "DELETE FROM membre WHERE id_membre = ?";
+            $query = "DELETE FROM PlanInscription WHERE idPlanInscription = ?";
             $stmt = self::$db->prepare($query);
 
             $stmt->execute([$id]);
@@ -115,5 +109,4 @@ class MembreDao {
         }
     }
 }
-
 ?>
