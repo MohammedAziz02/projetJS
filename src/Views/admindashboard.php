@@ -124,6 +124,7 @@
 
     <!-- c'est le modal de la formulaire ajouter Plan d'inscription -->
     <?php require "./ModalAjouterPlanInscription.php" ?>
+    <?php require "./ModalModifierMembre.php" ?>
 
 
     <?php require "./ModalSupprimerMembre.php" ?>
@@ -251,13 +252,27 @@
 
                         var modifierCell = row.insertCell();
                         var modifierButton = document.createElement('button');
+                        modifierButton.setAttribute("data-toggle","modal");
+                        modifierButton.setAttribute("data-target","#modalModifierMembre");
                         modifierButton.textContent = 'Modifier';
                         modifierButton.classList.add('btn', 'btn-success');
                         modifierCell.appendChild(modifierButton);
                         modifierCell.classList.add('text-center');
-                        modifierButton.addEventListener("click", () => {
-                            console.log("test modifier");
-                        })
+                        modifierButton.addEventListener("click", (e) => {
+                            const elem = e.target.parentElement.parentElement.children;
+                            var modalNom =document.getElementById('modalNom');
+                            modalNom.value=elem[1].innerText;
+                            console.log(elem[1].innerText);
+                            console.log(elem[2].innerText);
+                            //const nom=document.getElementById("nom");
+                            console.log(nom);
+                            //nom.value = elem[1].innerText;
+                            prenom.value = elem[2].innerText;
+                            adresse.value = elem[3].innerText;
+                            email.value = elem[4].innerText;
+                            telephone.value = elem[5].innerText; 
+                            });
+                            
 
 
                         var supprimerCell = row.insertCell();
@@ -297,15 +312,27 @@
             })
 
         }
+        var modifierMembreInModal=document.getElementById('modifierMembreInModal');
+                            modifierMembreInModal.addEventListener("click",(e)=>{
+                                e.preventDefault();
+                                const elem = e.target.parentElement.parentElement.children;
+                                var formulaire=document.getElementById("formulaire");
+                                console.log(formulaire);
+                                const formData = new FormData(formulaire);
+                                formData.append("test","ok");
+                                 formData.append("id", elem[0].innerText);
+                                 console.log(formData);
+                                // formData.append("action", "modifier");
+                                // xhr.open("POST", "../Controllers/traitementMembre.php", true);
+                                // xhr.send(formData);
+                                // //getAllMembres();
+                                // console.log("test modifier");
+                                });
 
         document.getElementById("afficher-membre-btn").addEventListener("click", () => {
             getAllMembres();
         })
     </script>
-
-
-
-
 
 </body>
 
