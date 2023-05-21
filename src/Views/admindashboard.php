@@ -99,35 +99,7 @@
                 <div class="container-fluid">
 
                     <div id="table-container">
-                        <!-- <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td colspan="2">Larry the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
-                            </tbody>
-                        </table> -->
+
 
                     </div>
 
@@ -146,25 +118,8 @@
 
 
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- c'est le modal de Logout -->
+    <?php require "./LogoutModal.php" ?>
 
 
     <!-- c'est le modal de la formulaire ajouter Plan d'inscription -->
@@ -181,39 +136,156 @@
     <script src="../../public/js/sb-admin-2.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            // AJAX request to fetch and update the table data
-            function updateTableData() {
-                $.ajax({
-                    url: "../Controllers/test.php",
-                    type: "GET",
-                    success: function(data) {
-                        // Update the table with the received data
-                        // $("#table-container").html(data);
-                        console.log(JSON.parse(data));
-                        // console.log(data);
+        function getXhr() {
+            let xhr = null;
+            try {
+                xhr = new XMLHttpRequest();
+                console.log("Your browser support AJAX!");
+            } catch (e) {
+                try {
+                    xhr = new ActiveXObject("Msxml2.XMLHTTP");
+                } catch (e) {
+                    try {
+                        xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (e) {
+                        console.log("Your browser does not support AJAX!");
                     }
-                });
+                }
             }
-
-            // Bind click event to "afficher membre" button
-            $("#afficher-membre-btn").click(function() {
-                updateTableData();
-
-            });
+            return xhr;
+        }
 
 
-            updateTableData();
-
-            const list = Array.from(document.getElementsByClassName("supprimer"));
-            console.log(list);
-        
+        const xhr = getXhr();
 
 
+        function getAllMembres() {
+            const formData = new FormData();
+            formData.append("action", 'afficherTousmembres');
+            xhr.open("POST", "../Controllers/test.php", true);
+            xhr.send(formData);
+            xhr.addEventListener("readystatechange", () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Request succeeded
+                    var response = JSON.parse(xhr.responseText);
+                    console.log(response);
+                    var tableContainer = document.getElementById('table-container');
 
 
+                    // Clear existing content
+                    tableContainer.innerHTML = '';
 
-        });
+                    // Create and populate the table
+                    var table = document.createElement('table');
+                    table.classList.add('table', 'table-striped', 'table-hover');
+
+
+                    // Create the table header
+                    var headerRow = table.insertRow();
+
+                    var Id = headerRow.insertCell();
+                    Id.textContent = 'Id';
+                    Id.classList.add("text-center");
+
+                    var Nom = headerRow.insertCell();
+                    Nom.textContent = 'Nom';
+                    Nom.classList.add("text-center");
+
+                    var Prenom = headerRow.insertCell();
+                    Prenom.textContent = 'Prenom';
+                    Prenom.classList.add("text-center");
+
+                    var Adresse = headerRow.insertCell();
+                    Adresse.textContent = 'Adresse';
+                    Adresse.classList.add("text-center");
+
+
+                    var Email = headerRow.insertCell();
+                    Email.textContent = 'Email';
+                    Email.classList.add("text-center");
+
+                    var Telephone = headerRow.insertCell();
+                    Telephone.textContent = 'Telephone';
+                    Telephone.classList.add("text-center");
+
+                    var Action = headerRow.insertCell();
+                    Action.textContent = 'Action';
+                    Action.colSpan = 2;
+                    Action.classList.add("text-center")
+
+
+                    // ... add more header cells for other member properties
+
+                    for (var i = 0; i < response.length; i++) {
+                        var member = response[i];
+                        var row = table.insertRow();
+
+                        // Add the member data to the table cells
+                        var cell1 = row.insertCell();
+                        cell1.textContent = member.id_membre;
+                        cell1.classList.add("text-center");
+
+                        var cell2 = row.insertCell();
+                        cell2.textContent = member.nom;
+                        cell2.classList.add("text-center");
+
+                        var cell3 = row.insertCell();
+                        cell3.textContent = member.prenom;
+                        cell3.classList.add("text-center");
+
+
+                        var cell4 = row.insertCell();
+                        cell4.textContent = member.adresse;
+                        cell4.classList.add("text-center");
+                        var cell5 = row.insertCell();
+                        cell5.textContent = member.email;
+                        cell5.classList.add("text-center");
+
+                        var cell6 = row.insertCell();
+                        cell6.textContent = member.telephone;
+                        cell6.classList.add("text-center");
+
+
+                        var modifierCell = row.insertCell();
+                        var modifierButton = document.createElement('button');
+                        modifierButton.textContent = 'Modifier';
+                        modifierButton.classList.add('btn', 'btn-success');
+                        modifierCell.appendChild(modifierButton);
+                        modifierCell.classList.add('text-center');
+                        modifierButton.addEventListener("click", () => {
+                            console.log("test modifier");
+                        })
+
+
+                        var supprimerCell = row.insertCell();
+                        var supprimerButton = document.createElement('button');
+                        supprimerButton.textContent = 'Supprimer';
+                        supprimerButton.classList.add('btn', 'btn-danger');
+                        supprimerCell.appendChild(supprimerButton);
+                        supprimerCell.classList.add('text-center');
+                        supprimerButton.addEventListener("click", (e) => {
+                            var x=confirm("vous voulez vraiment supprimer cette Membre");
+                            console.log(x);
+                            const elem = e.target.parentElement.parentElement.firstChild;
+                            if (xhr.readyState == 4 && xhr.status === 200) {}
+                            const formData = new FormData();
+                            formData.append("id", elem.innerText);
+                            formData.append("action", "supprimer");
+                            xhr.open("POST", "../Controllers/traitementMembre.php", true);
+                            xhr.send(formData);
+                            getAllMembres();
+                        })
+
+                        tableContainer.appendChild(table);
+                    }
+                }
+            })
+
+        }
+
+        document.getElementById("afficher-membre-btn").addEventListener("click", () => {
+            getAllMembres();
+        })
     </script>
 
 
