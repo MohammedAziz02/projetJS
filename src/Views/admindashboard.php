@@ -126,6 +126,8 @@
     <?php require "./ModalAjouterPlanInscription.php" ?>
     <?php require "./ModalModifierMembre.php" ?>
 
+    <?php require "./ModalSupprimerMembre.php" ?>
+
     <!-- Bootstrap core JavaScript-->
     <script src="../../public/vendor/jquery/jquery.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -249,23 +251,24 @@
 
                         var modifierCell = row.insertCell();
                         var modifierButton = document.createElement('button');
-                        modifierButton.setAttribute("data-toggle","modal");
-                        modifierButton.setAttribute("data-target","#modalModifierMembre");
+                        modifierButton.setAttribute("data-toggle", "modal");
+                        modifierButton.setAttribute("data-target", "#modalModifierMembre");
                         modifierButton.textContent = 'Modifier';
                         modifierButton.classList.add('btn', 'btn-success');
                         modifierCell.appendChild(modifierButton);
                         modifierCell.classList.add('text-center');
                         modifierButton.addEventListener("click", (e) => {
                             const elem = e.target.parentElement.parentElement.children;
-                            var modalNom =document.getElementById('modalNom');
-                            idMembre.value=elem[0].innerText;
-                            modalNom.value=elem[1].innerText;
+                            var modalNom = document.getElementById('modalNom');
+                            idMembre.value = elem[0].innerText;
+                            modalNom.value = elem[1].innerText;
                             prenom.value = elem[2].innerText;
                             adresse.value = elem[3].innerText;
                             email.value = elem[4].innerText;
-                            telephone.value = elem[5].innerText; 
-                            });
-                            
+                            telephone.value = elem[5].innerText;
+                        });
+
+
 
 
                         var supprimerCell = row.insertCell();
@@ -274,16 +277,28 @@
                         supprimerButton.classList.add('btn', 'btn-danger');
                         supprimerCell.appendChild(supprimerButton);
                         supprimerCell.classList.add('text-center');
+                        //on doit tout d'abord ajouter les attributs pour addentifier le modal de confirmation de suppression
+                        supprimerButton.setAttribute('data-toggle', 'modal');
+                        supprimerButton.setAttribute('data-target', '#supprimerModal');
+                        //ici c'est l'évenement de button supprimer qu'on on clique sur la button le modal de confirmation de suppression pop up
+                        // il contient déja une button donc on doit faire une nouvelle event sur la button supprimer de button
                         supprimerButton.addEventListener("click", (e) => {
-                            var x=confirm("vous voulez vraiment supprimer cette Membre");
-                            console.log(x);
-                            const elem = e.target.parentElement.parentElement.firstChild;
-                            const formData = new FormData();
-                            formData.append("id", elem.innerText);
-                            formData.append("action", "supprimer");
-                            xhr.open("POST", "../Controllers/traitementMembre.php", true);
-                            xhr.send(formData);
-                            getAllMembres();
+                            //ici on identifie le button supprimer du modal et on fait alors la logique du suppression
+                            var confirmDeleteButton = document.getElementById('confirmDelete');
+                            confirmDeleteButton.addEventListener('click', function() {
+                                const elem = e.target.parentElement.parentElement.firstChild;
+                                const formData = new FormData();
+                                formData.append("id", elem.innerText);
+                                formData.append("action", "supprimer");
+                                xhr.open("POST", "../Controllers/traitementMembre.php", true);
+                                xhr.send(formData);
+
+                                // mn b3d ma lmodal kaytl3 khsna mn b3d mancliquiw 3la supprimer lmodel ymchi mayb9ach donc khsna nzido 
+                                $('#supprimerModal').modal('hide');
+                                getAllMembres();
+
+                            });
+
                         })
 
                         tableContainer.appendChild(table);
@@ -292,14 +307,14 @@
             })
 
         }
-        var modifierMembreInModal=document.getElementById('modifierMembreInModal');
-        modifierMembreInModal.addEventListener("click",(e)=>{
+        var modifierMembreInModal = document.getElementById('modifierMembreInModal');
+        modifierMembreInModal.addEventListener("click", (e) => {
             e.preventDefault();
             const elem = e.target.parentElement.parentElement.children;
             console.log(elem[0].innerText);
-            var formulaire=document.getElementById("formulaire");
+            var formulaire = document.getElementById("formulaire");
             console.log(formulaire);
-            if (xhr.readyState == 4 && xhr.status == 200){
+            if (xhr.readyState == 4 && xhr.status == 200) {
                 console.log(xhr.responseText);
             }
             formData = new FormData(formulaire);
@@ -309,9 +324,10 @@
             xhr.send(formData);
 
             formulaire.reset();
-            // //getAllMembres();
-            // console.log("test modifier");
-            });
+            $('#modalModifierMembre').modal('hide');
+            getAllMembres();
+           
+        });
 
         document.getElementById("afficher-membre-btn").addEventListener("click", () => {
             getAllMembres();
@@ -320,24 +336,8 @@
 
 </body>
 
-</html>     xhr.open("POST", "../Controllers/traitementMembre.php", true);
-            xhr.send(formData);
+</html>
 
-            formulaire.reset();
-            // //getAllMembres();
-            // console.log("test modifier");
-            });
-
-        document.getElementById("afficher-membre-btn").addEventListener("click", () => {
-            getAllMembres();
-        })
-
-
-
-        // let formData = new FormData();
-        // formData.append('key1', 'value1');
-        // formData.append('key2', 'value2');
-    </script>
 
 </body>
 

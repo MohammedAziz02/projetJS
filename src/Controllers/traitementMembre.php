@@ -3,7 +3,7 @@
 use gestionclub\DAO\MembreDao;
 use gestionclub\Models\Membre;
 
-require _DIR_. "/../../vendor/autoload.php";
+require __DIR__. "/../../vendor/autoload.php";
 
 $id = isset($_POST['id']) ? $_POST['id'] : NULL;
 $nom = isset($_POST['nom']) ? $_POST['nom'] : NULL;
