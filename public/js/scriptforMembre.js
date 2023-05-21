@@ -182,3 +182,24 @@ document.getElementById("afficher-membre-btn").addEventListener("click", () => {
     getAllMembres();
 
 })
+
+
+var type = "membre";
+const searchButton = document.getElementById("searchButton");
+searchButton.addEventListener("click", (e) => {
+    type = "membre";
+    var searchValue = document.getElementById("search").value;
+    console.log(searchValue);
+    if (xhr.readyState == 4 && xhr.status == 200) {
+        console.log(xhr.responseText);
+    }
+    var formData = new FormData();
+    formData.append("type", type);
+    formData.append("search", searchValue);
+    formData.append("action", "search");
+
+    xhr.open("POST", "../Controllers/traitementMembre.php");
+    xhr.send(formData);
+
+
+
