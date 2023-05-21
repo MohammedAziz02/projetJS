@@ -13,6 +13,8 @@ $adresse = isset($_POST['adresse']) ? $_POST['adresse'] : NULL;
 $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : NULL;
 
 $action = isset($_POST['action']) ? $_POST['action'] : NULL;
+$type = isset($_POST['type']) ? $_POST['type'] : NULL;
+$search = isset($_POST['search']) ? $_POST['search'] : NULL;
 
 
 
@@ -39,4 +41,17 @@ else if($action=='modifier'){
     //$membres=MembreDAO::getMembreByAll("");
     //echo json_encode($membres);
     echo "success";
+}
+else if($action=='search'){
+    if($type=='membre'){
+        $membres=MembreDAO::getMembreByAll($search);
+        echo json_encode($membres);
+
+    }else if($type=='planInscription'){
+        $planInscription=PlanInscriptionDAO::getPlanInscriptionByAll($search);
+        echo json_encode($planInscription);
+    }else if($type=='inscription'){
+        $inscription=InscriptionDAO::getInscriptionByAll($search);
+        echo json_encode($inscription);
+    }
 }
