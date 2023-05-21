@@ -45,7 +45,7 @@
                 <h6 class="collapse-header">Actions:</h6>
                 <a class="collapse-item" data-toggle="modal" data-target="#modalAjouterPlanInscription" >Ajouter un Plan</a>
                 
-                <a class="collapse-item" href="utilities-color.html">Afficher les Plans</a>
+                <a class="collapse-item" id="btnafficherPlans">Afficher les Plans</a>
 
             </div>
         </div>
