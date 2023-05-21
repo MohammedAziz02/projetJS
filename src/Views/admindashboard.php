@@ -252,27 +252,24 @@
 
                         var modifierCell = row.insertCell();
                         var modifierButton = document.createElement('button');
-                        modifierButton.setAttribute("data-toggle","modal");
-                        modifierButton.setAttribute("data-target","#modalModifierMembre");
+                        modifierButton.setAttribute("data-toggle", "modal");
+                        modifierButton.setAttribute("data-target", "#modalModifierMembre");
                         modifierButton.textContent = 'Modifier';
                         modifierButton.classList.add('btn', 'btn-success');
                         modifierCell.appendChild(modifierButton);
                         modifierCell.classList.add('text-center');
                         modifierButton.addEventListener("click", (e) => {
                             const elem = e.target.parentElement.parentElement.children;
-                            var modalNom =document.getElementById('modalNom');
-                            modalNom.value=elem[1].innerText;
-                            console.log(elem[1].innerText);
-                            console.log(elem[2].innerText);
-                            //const nom=document.getElementById("nom");
-                            console.log(nom);
-                            //nom.value = elem[1].innerText;
-                            prenom.value = elem[2].innerText;
-                            adresse.value = elem[3].innerText;
-                            email.value = elem[4].innerText;
-                            telephone.value = elem[5].innerText; 
-                            });
-                            
+                            var modalNom = document.getElementById('modalNom');
+
+                            modalNom.value = elem[1].innerText;
+
+                            Modalprenom.value = elem[2].innerText;
+                            Modaladresse.value = elem[3].innerText;
+                            Modalemail.value = elem[4].innerText;
+                            Modaltelephone.value = elem[5].innerText;
+                        });
+
 
 
                         var supprimerCell = row.insertCell();
@@ -305,33 +302,38 @@
 
                         })
                         // on ajoute le tableau au div "table-container"
-
                         tableContainer.appendChild(table);
                     }
                 }
             })
 
         }
-        var modifierMembreInModal=document.getElementById('modifierMembreInModal');
-                            modifierMembreInModal.addEventListener("click",(e)=>{
-                                e.preventDefault();
-                                const elem = e.target.parentElement.parentElement.children;
-                                var formulaire=document.getElementById("formulaire");
-                                console.log(formulaire);
-                                const formData = new FormData(formulaire);
-                                formData.append("test","ok");
-                                 formData.append("id", elem[0].innerText);
-                                 console.log(formData);
-                                // formData.append("action", "modifier");
-                                // xhr.open("POST", "../Controllers/traitementMembre.php", true);
-                                // xhr.send(formData);
-                                // //getAllMembres();
-                                // console.log("test modifier");
-                                });
+        var modifierMembreInModal1 = document.getElementById('modifierMembreInModal');
+        modifierMembreInModal1.addEventListener("click", (e) => {
+            e.preventDefault();
+            // const elem = e.target.parentElement.parentElement.children;
+            // console.log('first',elem[0].innerText);
+            var formulaire = document.getElementById("formModifierMembre");
+            
+            const formData = new FormData(formulaire);
+            formData.append("id",31);
+             
+            formData.append("action", "modifier");
+            xhr.open("POST", "../Controllers/traitementMembre.php", true);
+            xhr.send(formData);
+            // getAllMembres();
+            console.log("test modifier");
+        });
 
         document.getElementById("afficher-membre-btn").addEventListener("click", () => {
             getAllMembres();
         })
+
+
+
+        // let formData = new FormData();
+        // formData.append('key1', 'value1');
+        // formData.append('key2', 'value2');
     </script>
 
 </body>

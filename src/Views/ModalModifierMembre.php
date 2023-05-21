@@ -9,30 +9,30 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formulaire">
+                <form id="formModifierMembre">
                 <div class="form-group">
                         <label for="nom">Nom:</label>
-                        <input type="text" class="form-control" id="modalNom" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" id="modalNom" name="nom" placeholder="Entrer un nom:">
 
                     </div>
                     <div class="form-group">
                         <label for="nom">Prenom:</label>
-                        <input type="text" class="form-control" id="prenom" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" id="Modalprenom" name="prenom" placeholder="Entrer un nom:">
 
                     </div>
                     <div class="form-group">
                         <label for="nom">Adresse:</label>
-                        <input type="text" class="form-control" id="adresse" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" id="Modaladresse" name="adresse" placeholder="Entrer un nom:">
 
                     </div>
                     <div class="form-group">
                         <label for="nom">Email:</label>
-                        <input type="text" class="form-control" id="email" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" id="Modalemail" name="email" placeholder="Entrer un nom:">
 
                     </div>
                     <div class="form-group">
                         <label for="nom">Telephone:</label>
-                        <input type="text" class="form-control" id="telephone" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" id="Modaltelephone" name="telephone" placeholder="Entrer un nom:">
 
                     </div>
 
