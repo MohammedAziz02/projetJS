@@ -320,25 +320,4 @@
 
 </body>
 
-</html>     xhr.open("POST", "../Controllers/traitementMembre.php", true);
-            xhr.send(formData);
-
-            formulaire.reset();
-            // //getAllMembres();
-            // console.log("test modifier");
-            });
-
-        document.getElementById("afficher-membre-btn").addEventListener("click", () => {
-            getAllMembres();
-        })
-
-
-
-        // let formData = new FormData();
-        // formData.append('key1', 'value1');
-        // formData.append('key2', 'value2');
-    </script>
-
-</body>
-
 </html>
