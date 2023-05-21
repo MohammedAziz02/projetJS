@@ -260,16 +260,15 @@
                         modifierCell.classList.add('text-center');
                         modifierButton.addEventListener("click", (e) => {
                             const elem = e.target.parentElement.parentElement.children;
-                            var modalNom = document.getElementById('modalNom');
-
-                            modalNom.value = elem[1].innerText;
-
-                            Modalprenom.value = elem[2].innerText;
-                            Modaladresse.value = elem[3].innerText;
-                            Modalemail.value = elem[4].innerText;
-                            Modaltelephone.value = elem[5].innerText;
-                        });
-
+                            var modalNom =document.getElementById('modalNom');
+                            idMembre.value=elem[0].innerText;
+                            modalNom.value=elem[1].innerText;
+                            prenom.value = elem[2].innerText;
+                            adresse.value = elem[3].innerText;
+                            email.value = elem[4].innerText;
+                            telephone.value = elem[5].innerText; 
+                            });
+                            
 
 
                         var supprimerCell = row.insertCell();
@@ -308,22 +307,26 @@
             })
 
         }
-        var modifierMembreInModal1 = document.getElementById('modifierMembreInModal');
-        modifierMembreInModal1.addEventListener("click", (e) => {
+        var modifierMembreInModal=document.getElementById('modifierMembreInModal');
+        modifierMembreInModal.addEventListener("click",(e)=>{
             e.preventDefault();
-            // const elem = e.target.parentElement.parentElement.children;
-            // console.log('first',elem[0].innerText);
-            var formulaire = document.getElementById("formModifierMembre");
-            
-            const formData = new FormData(formulaire);
-            formData.append("id",31);
-             
+            const elem = e.target.parentElement.parentElement.children;
+            console.log(elem[0].innerText);
+            var formulaire=document.getElementById("formulaire");
+            console.log(formulaire);
+            if (xhr.readyState == 4 && xhr.status == 200){
+                console.log(xhr.responseText);
+            }
+            formData = new FormData(formulaire);
             formData.append("action", "modifier");
+            console.log(formData);
             xhr.open("POST", "../Controllers/traitementMembre.php", true);
             xhr.send(formData);
-            // getAllMembres();
-            console.log("test modifier");
-        });
+
+            formulaire.reset();
+            // //getAllMembres();
+            // console.log("test modifier");
+            });
 
         document.getElementById("afficher-membre-btn").addEventListener("click", () => {
             getAllMembres();

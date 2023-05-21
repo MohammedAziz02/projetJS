@@ -9,30 +9,34 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formModifierMembre">
+                <form id="formulaire">
+                <div class="form-group">
+                        <input type="text" class="form-control" name="id" id="idMembre" hidden >
+
+                    </div>
                 <div class="form-group">
                         <label for="nom">Nom:</label>
-                        <input type="text" class="form-control" id="modalNom" name="nom" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" name="nom" id="modalNom" placeholder="Entrer un nom:">
 
                     </div>
                     <div class="form-group">
                         <label for="nom">Prenom:</label>
-                        <input type="text" class="form-control" id="Modalprenom" name="prenom" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Entrer un nom:">
 
                     </div>
                     <div class="form-group">
                         <label for="nom">Adresse:</label>
-                        <input type="text" class="form-control" id="Modaladresse" name="adresse" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" name="adresse" id="adresse" placeholder="Entrer un nom:">
 
                     </div>
                     <div class="form-group">
                         <label for="nom">Email:</label>
-                        <input type="text" class="form-control" id="Modalemail" name="email" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" name="email" id="email" placeholder="Entrer un nom:">
 
                     </div>
                     <div class="form-group">
                         <label for="nom">Telephone:</label>
-                        <input type="text" class="form-control" id="Modaltelephone" name="telephone" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" name="telephone" id="telephone" placeholder="Numero:">
 
                     </div>
 

@@ -152,7 +152,7 @@ class MembreDao {
     // Static method to update a member
     public static function updateMembre(Membre $membre) {
         try {
-            $query = "UPDATE membre SET nom = ?, prenom = ?, adresse = ?, email = ?, telephone = ?  , password=? WHERE id_membre = ?";
+            $query = "UPDATE membre SET nom = ?, prenom = ?, adresse = ?, email = ?, telephone = ?  , password = ? WHERE id_membre = ?";
             $stmt = self::$db->prepare($query);
             $stmt->execute([
                 $membre->getNom(),
@@ -160,12 +160,14 @@ class MembreDao {
                 $membre->getAdresse(),
                 $membre->getEmail(),
                 $membre->getTelephone(),
-                $membre->getid_membre(),
-                $membre->getpassword()
+                $membre->getpassword(),
+                $membre->getid_membre()
+                
             ]);
 
             return true;
         } catch (PDOException $e) {
+            echo $e->getMessage();
             // Handle any errors or exceptions
             return false;
         }

@@ -30,8 +30,7 @@ else if($action=='modifier'){
 
     $membre=MembreDao::getMembreById($id);
 
-    echo "membre==> ".$membre;
-    
+ 
 
     MembreDAO::updateMembre($membre);
     // $membres=MembreDAO::getMembreByAll("");
