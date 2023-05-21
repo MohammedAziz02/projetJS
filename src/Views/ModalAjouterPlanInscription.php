@@ -1,8 +1,3 @@
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-</button>
-
 <!-- Modal -->
 <div class="modal fade" id="modalAjouterPlanInscription" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">

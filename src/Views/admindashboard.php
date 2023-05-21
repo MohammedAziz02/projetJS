@@ -125,6 +125,9 @@
     <!-- c'est le modal de la formulaire ajouter Plan d'inscription -->
     <?php require "./ModalAjouterPlanInscription.php" ?>
 
+
+    <?php require "./ModalSupprimerMembre.php" ?>
+
     <!-- Bootstrap core JavaScript-->
     <script src="../../public/vendor/jquery/jquery.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -263,18 +266,30 @@
                         supprimerButton.classList.add('btn', 'btn-danger');
                         supprimerCell.appendChild(supprimerButton);
                         supprimerCell.classList.add('text-center');
+                        //on doit tout d'abord ajouter les attributs pour addentifier le modal de confirmation de suppression
+                        supprimerButton.setAttribute('data-toggle', 'modal');
+                        supprimerButton.setAttribute('data-target', '#supprimerModal');
+                        //ici c'est l'évenement de button supprimer qu'on on clique sur la button le modal de confirmation de suppression pop up
+                        // il contient déja une button donc on doit faire une nouvelle event sur la button supprimer de button
                         supprimerButton.addEventListener("click", (e) => {
-                            var x=confirm("vous voulez vraiment supprimer cette Membre");
-                            console.log(x);
-                            const elem = e.target.parentElement.parentElement.firstChild;
-                            if (xhr.readyState == 4 && xhr.status === 200) {}
-                            const formData = new FormData();
-                            formData.append("id", elem.innerText);
-                            formData.append("action", "supprimer");
-                            xhr.open("POST", "../Controllers/traitementMembre.php", true);
-                            xhr.send(formData);
-                            getAllMembres();
+                            //ici on identifie le button supprimer du modal et on fait alors la logique du suppression
+                            var confirmDeleteButton = document.getElementById('confirmDelete');
+                            confirmDeleteButton.addEventListener('click', function() {
+                                const elem = e.target.parentElement.parentElement.firstChild;
+                                const formData = new FormData();
+                                formData.append("id", elem.innerText);
+                                formData.append("action", "supprimer");
+                                xhr.open("POST", "../Controllers/traitementMembre.php", true);
+                                xhr.send(formData);
+
+                                // mn b3d ma lmodal kaytl3 khsna mn b3d mancliquiw 3la supprimer lmodel ymchi mayb9ach donc khsna nzido 
+                                $('#supprimerModal').modal('hide');
+                                getAllMembres();
+
+                            });
+
                         })
+                        // on ajoute le tableau au div "table-container"
 
                         tableContainer.appendChild(table);
                     }
