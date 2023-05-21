@@ -18,15 +18,16 @@ use gestionclub\DAO\MembreDao;
 
 require __DIR__. "/../../vendor/autoload.php";
 
-$members=MembreDao::getMembreByAll("");
+if(isset($_POST["action"])){
+    if($_POST["action"]=="afficherTousmembres"){
+        $members=MembreDao::getMembreByAll("");
+        // print_r( type $members);
+        $json=json_encode($members);
+        echo $json;
+    }
+}
 
 
-
-
-
-// print_r( type $members);
-//$json=json_encode($members);
-//echo $json;
 
 
 
@@ -50,7 +51,3 @@ $members=MembreDao::getMembreByAll("");
 // $tableData .= '</table>';
 
 // echo $tableData;
-
-
-?>
-

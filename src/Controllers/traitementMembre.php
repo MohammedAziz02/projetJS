@@ -21,9 +21,13 @@ if($action=='afficherTous'){
     echo json_encode($membres);
 }
 else if($action=='supprimer'){
-    $membres=MembreDAO::deleteMembreById($id);
+    $membres=MembreDAO::deleteMembre( $id);
+    // echo json_encode($membres);
+}
+else if($action=='modifier'){
+    $membre=
+
+    MembreDAO::updateMembre($membre);
+    $membres=MembreDAO::getMembreByAll("");
     echo json_encode($membres);
 }
-
-
-?>

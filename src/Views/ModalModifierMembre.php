@@ -9,10 +9,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="formulaire">
                 <div class="form-group">
                         <label for="nom">Nom:</label>
-                        <input type="text" class="form-control" id="nom" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" id="modalNom" placeholder="Entrer un nom:">
 
                     </div>
                     <div class="form-group">
@@ -36,7 +36,7 @@
 
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <button type="submit" class="btn btn-primary" id="modifierMembreInModal">Modifier</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </form>
 

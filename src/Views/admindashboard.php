@@ -99,35 +99,7 @@
                 <div class="container-fluid">
 
                     <div id="table-container">
-                        <!-- <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td colspan="2">Larry the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
-                            </tbody>
-                        </table> -->
+
 
                     </div>
 
@@ -146,35 +118,13 @@
 
 
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- test   -->
-
-    <div> 
-    
-</div>
-
+    <!-- c'est le modal de Logout -->
+    <?php require "./LogoutModal.php" ?>
 
 
     <!-- c'est le modal de la formulaire ajouter Plan d'inscription -->
     <?php require "./ModalAjouterPlanInscription.php" ?>
+    <?php require "./ModalModifierMembre.php" ?>
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../public/vendor/jquery/jquery.min.js"></script>
@@ -187,81 +137,186 @@
     <script src="../../public/js/sb-admin-2.min.js"></script>
 
     <script>
-
-    function getAllMembres() {
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener('readystatechange', function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            //let res = document.getElementById('res');
-            //res.hidden = false;
-            var membres=JSON.parse(xhr.responseText);
-            console.log(typeof membres);
-            membres.map(e=>console.log(createMembre(e)));   
-
-            //displayEtudiants(JSON.parse(xhr.responseText));
+        function getXhr() {
+            let xhr = null;
+            try {
+                xhr = new XMLHttpRequest();
+                console.log("Your browser support AJAX!");
+            } catch (e) {
+                try {
+                    xhr = new ActiveXObject("Msxml2.XMLHTTP");
+                } catch (e) {
+                    try {
+                        xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (e) {
+                        console.log("Your browser does not support AJAX!");
+                    }
+                }
+            }
+            return xhr;
         }
-    });
-    const dataform = new FormData();
-    dataform.append("action", "afficherTous");
-            xhr.open("POST", "../Controllers/traitementMembre.php", true);
-    xhr.send(dataform);
-    }
-    getAllMembres();
 
 
-function createMembre(membre) {
-    let tr = document.createElement("tr");
-    let td1 = document.createElement("td");
-    td1.innerText = membre["id_membre"];
-    let td2 = document.createElement("td");
-    td2.innerText = membre["nom"];
-    let td3 = document.createElement("td");
-    td3.innerText = membre["prenom"];
-    let td4 = document.createElement("td");
-    td4.innerText = membre["adresse"];
-    let td5 = document.createElement("td");
-    td5.innerText = membre["email"];
-    let td6 = document.createElement("td");
-    td6.innerText = membre["telephone"];
-    let td7 = document.createElement("td");
-    //td7.innerHTML=`<button class='btn btn-primary mx-1 onclick='updateStudent''>Modifier</button><button class='btn btn-danger' onclick=${deleteStudent}>Supprimer</button>`
-    let supprimerbtn = document.createElement("button");
-    let modifierbtn = document.createElement("button");
-    supprimerbtn.className = "btn btn-danger";
-    supprimerbtn.innerText = "supprimer";
-    supprimerbtn.addEventListener("click", supprimerMembre);
-
-    modifierbtn.className = "btn btn-primary";
-    modifierbtn.innerText = "modifier";
-    
-    modifierbtn.addEventListener("click", modifierMembre);
-    td7.append(supprimerbtn);
-    td7.append(modifierbtn);
-    tr.append(td1, td2, td3, td4, td5, td6, td7);
-    return tr;
-
-}
-
-function supprimerMembre(){
-    const elem = e.target.parentElement.parentElement.firstChild;
-    if (xhr.readyState == 4 && xhr.status === 200) {
-    }
-    const formData = new FormData();
-    formData.append("id", elem.innerText);
-    formData.append("action", "supprimer");
-    xhr.open("POST", "../Controllers/traitementMembre.php", true);
-    xhr.send(formData);
-    getAllMembres();
-};
-function modifierMembre(){
-
-};
-
-  </script>
+        const xhr = getXhr();
 
 
+        function getAllMembres() {
+            const formData = new FormData();
+            formData.append("action", 'afficherTousmembres');
+            xhr.open("POST", "../Controllers/test.php", true);
+            xhr.send(formData);
+            xhr.addEventListener("readystatechange", () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Request succeeded
+                    var response = JSON.parse(xhr.responseText);
+                    console.log(response);
+                    var tableContainer = document.getElementById('table-container');
 
 
+                    // Clear existing content
+                    tableContainer.innerHTML = '';
+
+                    // Create and populate the table
+                    var table = document.createElement('table');
+                    table.classList.add('table', 'table-striped', 'table-hover');
+
+
+                    // Create the table header
+                    var headerRow = table.insertRow();
+
+                    var Id = headerRow.insertCell();
+                    Id.textContent = 'Id';
+                    Id.classList.add("text-center");
+
+                    var Nom = headerRow.insertCell();
+                    Nom.textContent = 'Nom';
+                    Nom.classList.add("text-center");
+
+                    var Prenom = headerRow.insertCell();
+                    Prenom.textContent = 'Prenom';
+                    Prenom.classList.add("text-center");
+
+                    var Adresse = headerRow.insertCell();
+                    Adresse.textContent = 'Adresse';
+                    Adresse.classList.add("text-center");
+
+
+                    var Email = headerRow.insertCell();
+                    Email.textContent = 'Email';
+                    Email.classList.add("text-center");
+
+                    var Telephone = headerRow.insertCell();
+                    Telephone.textContent = 'Telephone';
+                    Telephone.classList.add("text-center");
+
+                    var Action = headerRow.insertCell();
+                    Action.textContent = 'Action';
+                    Action.colSpan = 2;
+                    Action.classList.add("text-center")
+
+
+                    // ... add more header cells for other member properties
+
+                    for (var i = 0; i < response.length; i++) {
+                        var member = response[i];
+                        var row = table.insertRow();
+
+                        // Add the member data to the table cells
+                        var cell1 = row.insertCell();
+                        cell1.textContent = member.id_membre;
+                        cell1.classList.add("text-center");
+
+                        var cell2 = row.insertCell();
+                        cell2.textContent = member.nom;
+                        cell2.classList.add("text-center");
+
+                        var cell3 = row.insertCell();
+                        cell3.textContent = member.prenom;
+                        cell3.classList.add("text-center");
+
+
+                        var cell4 = row.insertCell();
+                        cell4.textContent = member.adresse;
+                        cell4.classList.add("text-center");
+                        var cell5 = row.insertCell();
+                        cell5.textContent = member.email;
+                        cell5.classList.add("text-center");
+
+                        var cell6 = row.insertCell();
+                        cell6.textContent = member.telephone;
+                        cell6.classList.add("text-center");
+
+
+                        var modifierCell = row.insertCell();
+                        var modifierButton = document.createElement('button');
+                        modifierButton.setAttribute("data-toggle","modal");
+                        modifierButton.setAttribute("data-target","#modalModifierMembre");
+                        modifierButton.textContent = 'Modifier';
+                        modifierButton.classList.add('btn', 'btn-success');
+                        modifierCell.appendChild(modifierButton);
+                        modifierCell.classList.add('text-center');
+                        modifierButton.addEventListener("click", (e) => {
+                            const elem = e.target.parentElement.parentElement.children;
+                            var modalNom =document.getElementById('modalNom');
+                            modalNom.value=elem[1].innerText;
+                            console.log(elem[1].innerText);
+                            console.log(elem[2].innerText);
+                            //const nom=document.getElementById("nom");
+                            console.log(nom);
+                            //nom.value = elem[1].innerText;
+                            prenom.value = elem[2].innerText;
+                            adresse.value = elem[3].innerText;
+                            email.value = elem[4].innerText;
+                            telephone.value = elem[5].innerText; 
+                            });
+                            
+
+
+                        var supprimerCell = row.insertCell();
+                        var supprimerButton = document.createElement('button');
+                        supprimerButton.textContent = 'Supprimer';
+                        supprimerButton.classList.add('btn', 'btn-danger');
+                        supprimerCell.appendChild(supprimerButton);
+                        supprimerCell.classList.add('text-center');
+                        supprimerButton.addEventListener("click", (e) => {
+                            var x=confirm("vous voulez vraiment supprimer cette Membre");
+                            console.log(x);
+                            const elem = e.target.parentElement.parentElement.firstChild;
+                            const formData = new FormData();
+                            formData.append("id", elem.innerText);
+                            formData.append("action", "supprimer");
+                            xhr.open("POST", "../Controllers/traitementMembre.php", true);
+                            xhr.send(formData);
+                            getAllMembres();
+                        })
+
+                        tableContainer.appendChild(table);
+                    }
+                }
+            })
+
+        }
+        var modifierMembreInModal=document.getElementById('modifierMembreInModal');
+                            modifierMembreInModal.addEventListener("click",(e)=>{
+                                e.preventDefault();
+                                const elem = e.target.parentElement.parentElement.children;
+                                var formulaire=document.getElementById("formulaire");
+                                console.log(formulaire);
+                                const formData = new FormData(formulaire);
+                                formData.append("test","ok");
+                                 formData.append("id", elem[0].innerText);
+                                 console.log(formData);
+                                // formData.append("action", "modifier");
+                                // xhr.open("POST", "../Controllers/traitementMembre.php", true);
+                                // xhr.send(formData);
+                                // //getAllMembres();
+                                // console.log("test modifier");
+                                });
+
+        document.getElementById("afficher-membre-btn").addEventListener("click", () => {
+            getAllMembres();
+        })
+    </script>
 
 </body>
 
