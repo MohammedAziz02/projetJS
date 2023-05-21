@@ -258,12 +258,8 @@
                         modifierButton.addEventListener("click", (e) => {
                             const elem = e.target.parentElement.parentElement.children;
                             var modalNom =document.getElementById('modalNom');
+                            idMembre.value=elem[0].innerText;
                             modalNom.value=elem[1].innerText;
-                            console.log(elem[1].innerText);
-                            console.log(elem[2].innerText);
-                            //const nom=document.getElementById("nom");
-                            console.log(nom);
-                            //nom.value = elem[1].innerText;
                             prenom.value = elem[2].innerText;
                             adresse.value = elem[3].innerText;
                             email.value = elem[4].innerText;
@@ -297,21 +293,25 @@
 
         }
         var modifierMembreInModal=document.getElementById('modifierMembreInModal');
-                            modifierMembreInModal.addEventListener("click",(e)=>{
-                                e.preventDefault();
-                                const elem = e.target.parentElement.parentElement.children;
-                                var formulaire=document.getElementById("formulaire");
-                                console.log(formulaire);
-                                const formData = new FormData(formulaire);
-                                formData.append("test","ok");
-                                 formData.append("id", elem[0].innerText);
-                                 console.log(formData);
-                                // formData.append("action", "modifier");
-                                // xhr.open("POST", "../Controllers/traitementMembre.php", true);
-                                // xhr.send(formData);
-                                // //getAllMembres();
-                                // console.log("test modifier");
-                                });
+        modifierMembreInModal.addEventListener("click",(e)=>{
+            e.preventDefault();
+            const elem = e.target.parentElement.parentElement.children;
+            console.log(elem[0].innerText);
+            var formulaire=document.getElementById("formulaire");
+            console.log(formulaire);
+            if (xhr.readyState == 4 && xhr.status == 200){
+                console.log(xhr.responseText);
+            }
+            formData = new FormData(formulaire);
+            formData.append("action", "modifier");
+            console.log(formData);
+            xhr.open("POST", "../Controllers/traitementMembre.php", true);
+            xhr.send(formData);
+
+            formulaire.reset();
+            // //getAllMembres();
+            // console.log("test modifier");
+            });
 
         document.getElementById("afficher-membre-btn").addEventListener("click", () => {
             getAllMembres();
