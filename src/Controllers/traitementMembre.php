@@ -2,6 +2,10 @@
 
 use gestionclub\DAO\MembreDao;
 use gestionclub\Models\Membre;
+use gestionclub\DAO\InscriptionDao;
+use gestionclub\Models\inscription;
+use gestionclub\DAO\PlanInscriptionDao;
+use gestionclub\Models\PlanInscription;
 
 require __DIR__. "/../../vendor/autoload.php";
 

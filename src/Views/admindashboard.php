@@ -332,13 +332,18 @@
         getAllMembres();
     });
     document.getElementById("afficher-membre-btn").addEventListener("click", () => {
+        type="membre";
         getAllMembres();
-    })
+    });
+    document.getElementById("afficher-plan-btn").addEventListener("click", () => {
+        type="planInscription";
+        getAllMembres();
+    });
+    
     // searching
-    var type="membre";
+        var type="membre";
     const searchButton = document.getElementById("searchButton");
     searchButton.addEventListener("click",(e)=>{
-        type="membre";
         var searchValue=document.getElementById("search").value;
         console.log(searchValue);
         if(xhr.readyState==4 && xhr.status==200){
