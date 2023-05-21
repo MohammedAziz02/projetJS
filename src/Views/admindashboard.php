@@ -126,9 +126,6 @@
     <?php require "./ModalAjouterPlanInscription.php" ?>
     <?php require "./ModalModifierMembre.php" ?>
 
-
-    <?php require "./ModalSupprimerMembre.php" ?>
-
     <!-- Bootstrap core JavaScript-->
     <script src="../../public/vendor/jquery/jquery.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -252,8 +249,8 @@
 
                         var modifierCell = row.insertCell();
                         var modifierButton = document.createElement('button');
-                        modifierButton.setAttribute("data-toggle", "modal");
-                        modifierButton.setAttribute("data-target", "#modalModifierMembre");
+                        modifierButton.setAttribute("data-toggle","modal");
+                        modifierButton.setAttribute("data-target","#modalModifierMembre");
                         modifierButton.textContent = 'Modifier';
                         modifierButton.classList.add('btn', 'btn-success');
                         modifierCell.appendChild(modifierButton);
@@ -277,30 +274,18 @@
                         supprimerButton.classList.add('btn', 'btn-danger');
                         supprimerCell.appendChild(supprimerButton);
                         supprimerCell.classList.add('text-center');
-                        //on doit tout d'abord ajouter les attributs pour addentifier le modal de confirmation de suppression
-                        supprimerButton.setAttribute('data-toggle', 'modal');
-                        supprimerButton.setAttribute('data-target', '#supprimerModal');
-                        //ici c'est l'évenement de button supprimer qu'on on clique sur la button le modal de confirmation de suppression pop up
-                        // il contient déja une button donc on doit faire une nouvelle event sur la button supprimer de button
                         supprimerButton.addEventListener("click", (e) => {
-                            //ici on identifie le button supprimer du modal et on fait alors la logique du suppression
-                            var confirmDeleteButton = document.getElementById('confirmDelete');
-                            confirmDeleteButton.addEventListener('click', function() {
-                                const elem = e.target.parentElement.parentElement.firstChild;
-                                const formData = new FormData();
-                                formData.append("id", elem.innerText);
-                                formData.append("action", "supprimer");
-                                xhr.open("POST", "../Controllers/traitementMembre.php", true);
-                                xhr.send(formData);
-
-                                // mn b3d ma lmodal kaytl3 khsna mn b3d mancliquiw 3la supprimer lmodel ymchi mayb9ach donc khsna nzido 
-                                $('#supprimerModal').modal('hide');
-                                getAllMembres();
-
-                            });
-
+                            var x=confirm("vous voulez vraiment supprimer cette Membre");
+                            console.log(x);
+                            const elem = e.target.parentElement.parentElement.firstChild;
+                            const formData = new FormData();
+                            formData.append("id", elem.innerText);
+                            formData.append("action", "supprimer");
+                            xhr.open("POST", "../Controllers/traitementMembre.php", true);
+                            xhr.send(formData);
+                            getAllMembres();
                         })
-                        // on ajoute le tableau au div "table-container"
+
                         tableContainer.appendChild(table);
                     }
                 }
@@ -321,6 +306,21 @@
             formData.append("action", "modifier");
             console.log(formData);
             xhr.open("POST", "../Controllers/traitementMembre.php", true);
+            xhr.send(formData);
+
+            formulaire.reset();
+            // //getAllMembres();
+            // console.log("test modifier");
+            });
+
+        document.getElementById("afficher-membre-btn").addEventListener("click", () => {
+            getAllMembres();
+        })
+    </script>
+
+</body>
+
+</html>     xhr.open("POST", "../Controllers/traitementMembre.php", true);
             xhr.send(formData);
 
             formulaire.reset();
