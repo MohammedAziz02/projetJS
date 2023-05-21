@@ -25,8 +25,8 @@ $members=MembreDao::getMembreByAll("");
 
 
 // print_r( type $members);
-$json=json_encode($members);
-echo $json;
+//$json=json_encode($members);
+//echo $json;
 
 
 
@@ -53,3 +53,4 @@ echo $json;
 
 
 ?>
+

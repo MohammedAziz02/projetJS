@@ -165,6 +165,12 @@
         </div>
     </div>
 
+    <!-- test   -->
+
+    <div> 
+    
+</div>
+
 
 
     <!-- c'est le modal de la formulaire ajouter Plan d'inscription -->
@@ -181,40 +187,77 @@
     <script src="../../public/js/sb-admin-2.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            // AJAX request to fetch and update the table data
-            function updateTableData() {
-                $.ajax({
-                    url: "../Controllers/test.php",
-                    type: "GET",
-                    success: function(data) {
-                        // Update the table with the received data
-                        // $("#table-container").html(data);
-                        console.log(JSON.parse(data));
-                        // console.log(data);
-                    }
-                });
-            }
 
-            // Bind click event to "afficher membre" button
-            $("#afficher-membre-btn").click(function() {
-                updateTableData();
+    function getAllMembres() {
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('readystatechange', function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            //let res = document.getElementById('res');
+            //res.hidden = false;
+            var membres=JSON.parse(xhr.responseText);
+            console.log(typeof membres);
+            membres.map(e=>console.log(createMembre(e)));   
 
-            });
-
-
-            updateTableData();
-
-            const list = Array.from(document.getElementsByClassName("supprimer"));
-            console.log(list);
-        
+            //displayEtudiants(JSON.parse(xhr.responseText));
+        }
+    });
+    const dataform = new FormData();
+    dataform.append("action", "afficherTous");
+            xhr.open("POST", "../Controllers/traitementMembre.php", true);
+    xhr.send(dataform);
+    }
+    getAllMembres();
 
 
+function createMembre(membre) {
+    let tr = document.createElement("tr");
+    let td1 = document.createElement("td");
+    td1.innerText = membre["id_membre"];
+    let td2 = document.createElement("td");
+    td2.innerText = membre["nom"];
+    let td3 = document.createElement("td");
+    td3.innerText = membre["prenom"];
+    let td4 = document.createElement("td");
+    td4.innerText = membre["adresse"];
+    let td5 = document.createElement("td");
+    td5.innerText = membre["email"];
+    let td6 = document.createElement("td");
+    td6.innerText = membre["telephone"];
+    let td7 = document.createElement("td");
+    //td7.innerHTML=`<button class='btn btn-primary mx-1 onclick='updateStudent''>Modifier</button><button class='btn btn-danger' onclick=${deleteStudent}>Supprimer</button>`
+    let supprimerbtn = document.createElement("button");
+    let modifierbtn = document.createElement("button");
+    supprimerbtn.className = "btn btn-danger";
+    supprimerbtn.innerText = "supprimer";
+    supprimerbtn.addEventListener("click", supprimerMembre);
 
+    modifierbtn.className = "btn btn-primary";
+    modifierbtn.innerText = "modifier";
+    
+    modifierbtn.addEventListener("click", modifierMembre);
+    td7.append(supprimerbtn);
+    td7.append(modifierbtn);
+    tr.append(td1, td2, td3, td4, td5, td6, td7);
+    return tr;
 
+}
 
-        });
-    </script>
+function supprimerMembre(){
+    const elem = e.target.parentElement.parentElement.firstChild;
+    if (xhr.readyState == 4 && xhr.status === 200) {
+    }
+    const formData = new FormData();
+    formData.append("id", elem.innerText);
+    formData.append("action", "supprimer");
+    xhr.open("POST", "../Controllers/traitementMembre.php", true);
+    xhr.send(formData);
+    getAllMembres();
+};
+function modifierMembre(){
+
+};
+
+  </script>
 
 
 
