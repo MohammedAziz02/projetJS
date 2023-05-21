@@ -131,6 +131,10 @@ class PlanInscriptionDAO {
     // Static method to delete a member
     public static function deletePlanInscription($id) {
         try {
+
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
             $query = "DELETE FROM PlanInscription WHERE idPlanInscription = ?";
             $stmt = self::$db->prepare($query);
 
@@ -138,9 +142,8 @@ class PlanInscriptionDAO {
 
             return true;
         } catch (PDOException $e) {
-            // Handle any errors or exceptions
+            echo $e->getMessage();
             return false;
         }
     }
 }
-?>

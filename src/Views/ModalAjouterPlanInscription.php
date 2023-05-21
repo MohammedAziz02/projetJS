@@ -9,23 +9,23 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="formulairePlanInscription">
                     <div class="form-group">
                         <label for="nom">Nom:</label>
-                        <input type="text" class="form-control" id="nom" placeholder="Entrer un nom:">
+                        <input type="text" class="form-control" id="nom" name="nomplan" placeholder="Entrer un nom:">
 
                     </div>
                     <div class="form-group">
                         <label for="description">Description:</label>
-                        <input type="text" class="form-control" id="description" placeholder="description...">
+                        <input type="text" class="form-control" id="description" name="descriptionplan" placeholder="description...">
                     </div>
 
                     <div class="form-group">
                         <label for="prix">Prix:</label>
-                        <input type="number" class="form-control" id="prix" placeholder="Prix...">
+                        <input type="number" class="form-control" id="prix" name="prixplan" placeholder="Prix...">
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                    <button type="submit" class="btn btn-primary" id="ajouterPlandinscription" >Ajouter</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </form>
 

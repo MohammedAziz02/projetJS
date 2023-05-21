@@ -132,6 +132,8 @@
 
     <?php require "./ModalSupprimerMembre.php" ?>
 
+    <?php  require "./modifierPlanInscriptionModal.php" ?>
+
     <!-- Bootstrap core JavaScript-->
     <script src="../../public/vendor/jquery/jquery.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -141,6 +143,8 @@
 
     <!-- Custom scripts for all pages-->
     <script src="../../public/js/sb-admin-2.min.js"></script>
+
+    <script src="../../public/js/scriptforPlanInscription.js"  type="module"></script>
 
     <script>
     function getXhr() {
@@ -162,7 +166,7 @@
         return xhr;
     }
 
-
+  
     const xhr = getXhr();
 
 

@@ -3,9 +3,11 @@
 
 namespace gestionclub\Models;
 
+use JsonSerializable;
 
 
-class PlanInscription
+
+class PlanInscription implements JsonSerializable
 {
     private $idPlanInscription;
     private $nom;
@@ -66,6 +68,16 @@ class PlanInscription
     public function __toString()
     {
         return "PlanInscription[idPlanInscription={$this->idPlanInscription}, nom={$this->nom}, description={$this->description}, prix={$this->prix}]";
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'idPlanInscription' => $this->idPlanInscription,
+            "nom" => $this->nom,
+            "description" => $this->description,
+            "prix" => $this->prix,
+            ];
     }
    
 }
