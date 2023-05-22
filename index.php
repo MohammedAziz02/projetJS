@@ -6,21 +6,21 @@ use gestionclub\Models\PlanInscription;
 require "./vendor/autoload.php";
 
 
-$membre1=new Membre("ayoub","Adil","06 rue intamim 01","azizmbu@gmail.com","0616815066","1233");
-$planinscription1=new PlanInscription("planinsci1","inscription 1",100);
-$planinscription2=new PlanInscription("planinsci1","inscription 1",200);
-$membre1->addtoListPlanInscription($planinscription1);
-$membre1->addtoListPlanInscription($planinscription2);
+// $membre1=new Membre("ayoub","Adil","06 rue intamim 01","azizmbu@gmail.com","0616815066","1233");
+// $planinscription1=new PlanInscription("planinsci1","inscription 1",100);
+// $planinscription2=new PlanInscription("planinsci1","inscription 1",200);
+// $membre1->addtoListPlanInscription($planinscription1);
+// $membre1->addtoListPlanInscription($planinscription2);
 
 
-echo $_SERVER['SERVER_NAME'];
-echo $_SERVER['REQUEST_URI'];
+// echo $_SERVER['SERVER_NAME'];
+// echo $_SERVER['REQUEST_URI'];
 
 
 
 
 
-MembreDao::createMembre($membre1);
+// MembreDao::createMembre($membre1);
 
 // MembreDao::deleteMembre(1);
 ?>

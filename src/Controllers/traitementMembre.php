@@ -45,6 +45,7 @@ else if($action=='modifier'){
     echo "success";
 }
 else if($action=='search'){
+    
     if($type=='membre'){
         $membres=MembreDAO::getMembreByAll($search);
         echo json_encode($membres);
