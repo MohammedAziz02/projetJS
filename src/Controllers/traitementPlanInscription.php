@@ -31,4 +31,6 @@ elseif($action=="supprimer"){
     echo "dkhl ";
     PlanInscriptionDAO::deletePlanInscription($id);
     echo "success";
+}else if($action=='afficherSelonId'){
+
 }

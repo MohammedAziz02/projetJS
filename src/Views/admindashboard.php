@@ -8,7 +8,6 @@ if(!isset($_SESSION['user'])){
     header("location:connexion.php");
 }else{ 
     $user=$_SESSION['user'];
-    print_r($user);
 }
 
 ?>

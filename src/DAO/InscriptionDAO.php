@@ -6,12 +6,11 @@ use PDO;
 use PDOException;
 
 use gestionclub\Models\Inscription;
+use gestionclub\DAO\InscriptionDAO;
 use gestionclub\Helpers\DatabaseConnection;
-use gestionclub\DAO\MembreDao;
-use gestionclub\Models\Membre;
-use gestionclub\Models\PlanInscription;
-use gestionclub\DAO\PlanInscriptionDAO;
-// require __DIR__ . "/../../vendor/autoload.php";
+
+
+ require __DIR__ . "/../../vendor/autoload.php";
 
 
 class InscriptionDAO {
@@ -34,15 +33,15 @@ class InscriptionDAO {
             $stmt = self::$db->prepare($query);
 
             $stmt->execute([
-                $Inscription->getMembre()->getid_membre(),
-                $Inscription->getPlanInscription()->getidPlanInscription(),
+                $Inscription->getidmembre(),
+                $Inscription->getidPlanInscription(),
                 $Inscription->getDateInscription(),
                 $Inscription->getEtat()
             ]);
             
             return self::$db->lastInsertId();
         } catch (PDOException $e) {
-            //echo $e->getMessage();
+            echo $e->getMessage();
             // Handle any errors or exceptions
             return false;
         }
@@ -64,14 +63,12 @@ class InscriptionDAO {
             if ($result) {
                 
                 $Inscription = new Inscription(
-                    MembreDAO::getMembreById($result['id_Membre']),
-                    PlanInscriptionDAO::getPlanInscriptionById($result['id_planInscription']),
-                    $result['date_inscription']
+                    $result['id_Membre'],
+                    $result['id_planInscription']
                 );
                 $Inscription->setidInscription($id);
                 $Inscription->setEtat($result['etat']);
                 return $Inscription;
-                echo "here";
             } else {
                 return null;
             }
@@ -98,16 +95,11 @@ class InscriptionDAO {
             while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
 
                 if ($result) {
-                    $membre=MembreDAO::getMembreById($result['id_Membre']);
-                    $planInscription=PlanInscriptionDAO::getPlanInscriptionById($result['id_planInscription']);
                     $inscription = new Inscription(
-                        $membre,
-                        $planInscription,
-                        $result['date_inscription'],
-                        $result['etat']
+                        $result['id_Membre'],
+                        $result['id_planInscription']
                     );
                     $inscription->setIdInscription($result["id_Inscription"]);
-
                     array_push($inscriptions,$inscription);
                 } 
             }
@@ -118,6 +110,72 @@ class InscriptionDAO {
         }
     }
 
+    //
+    public static function getInscriptionByMembre($idMembre){
+        try {
+
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "SELECT * FROM Inscription WHERE id_Membre = ?";
+            $stmt = self::$db->prepare($query);
+            $stmt->execute([$idMembre]);
+
+            $inscriptions=array();
+            while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+                if ($result) {
+                
+                    $Inscription = new Inscription(
+                        $result['id_Membre'],
+                        $result['id_planInscription']
+                    );
+                    $Inscription->setidInscription($result['id_Inscription']);
+                    $Inscription->setEtat($result['etat']);
+                    $Inscription->setDateInscription($result['date_inscription']);
+                    array_push($inscriptions, $Inscription);
+                } 
+            }
+            return $inscriptions; 
+            
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            // Handle any errors or exceptions
+            return null;
+        }
+    }
+    public static function getInscriptionByMembreandPlanInscriptionJoin($idMembre){
+        try {
+
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "SELECT * FROM Inscription I inner join PlanInscription P 
+            on P.idPlanInscription= I.id_planInscription inner join Membre M
+            on M.id_membre=I.id_Membre where M.id_membre= ?";
+            $stmt = self::$db->prepare($query);
+            $stmt->execute([$idMembre]);
+
+            $objects=array();
+            while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+                if ($result) {
+                    $object=["id_Inscription"=>$result['id_Inscription'],
+                    "nomPlanInscription"=>$result['nomPlanInscription'],
+                    "description"=>$result['description'],
+                    "dateInscription"=>$result['date_inscription'],
+                    "etat"=>$result['etat']
+                    ];
+                    array_push($objects, $object);
+                } 
+            }
+            return $objects; 
+            
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            // Handle any errors or exceptions
+            return null;
+        }
+    }
+    
 
 
     // Static method to update a member
@@ -129,8 +187,8 @@ class InscriptionDAO {
             $query = "UPDATE Inscription SET id_Membre= ?, id_PlanInscription = ?, etat = ? WHERE id_Inscription = ?";
             $stmt = self::$db->prepare($query);
             $stmt->execute([
-                $inscription->getMembre()->getid_membre(),
-                $inscription->getPlanInscription()->getidPlanInscription(),
+                $inscription->getidmembre(),
+                $inscription->getidPlanInscription(),
                 $inscription->getEtat(),
                 $inscription->getidInscription()
             ]);
@@ -161,4 +219,5 @@ class InscriptionDAO {
         }
     }
 }
+//print_r(InscriptionDAO::getInscriptionByMembreandPlanInscriptionJoin(38));
 ?>

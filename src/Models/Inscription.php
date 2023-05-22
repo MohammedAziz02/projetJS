@@ -1,21 +1,25 @@
 <?php
 
 namespace gestionclub\Models;
+use JsonSerializable;
 
+// $membre=MEmbreDAO:: getMembreById($id_membre);
 
-class Inscription {
+// ["nomMembre": ]
+
+class Inscription implements JsonSerializable
+{
     private $id_inscription;
-    private Membre $membre;
-    private PlanInscription $plan_inscription;
+    private  $id_membre;
+    private $id_plan_inscription;
     private $date_inscription;
     private $etat=" En attente";
 
     // Constructor
-    public function __construct( $membre, $plan_inscription, $date_inscription) {
-        
-        $this->membre = $membre;
-        $this->plan_inscription = $plan_inscription;
-        $this->date_inscription = $date_inscription;
+    public function __construct( $id_membre, $id_plan_inscription) {
+        $this->id_membre = $id_membre;
+        $this->id_plan_inscription = $id_plan_inscription;
+        $this->date_inscription = date("Y-m-d");
     }
 
     // Getters
@@ -23,12 +27,12 @@ class Inscription {
         return $this->id_inscription;
     }
 
-    public function getMembre() {
-        return $this->membre;
+    public function getIdMembre() {
+        return $this->id_membre;
     }
 
-    public function getPlanInscription() {
-        return $this->plan_inscription;
+    public function getIdPlanInscription() {
+        return $this->id_plan_inscription;
     }
 
     public function getDateInscription() {
@@ -44,12 +48,12 @@ class Inscription {
         $this->id_inscription = $id_inscription;
     }
 
-    public function setMembre($membre) {
-        $this->membre = $membre;
+    public function setIdMembre($id_membre) {
+        $this->id_membre = $id_membre;
     }
 
-    public function setPlanInscription($plan_inscription) {
-        $this->plan_inscription = $plan_inscription;
+    public function setIdPlanInscription($id_plan_inscription) {
+        $this->id_plan_inscription = $id_plan_inscription;
     }
 
     public function setDateInscription($date_inscription) {
@@ -62,10 +66,20 @@ class Inscription {
 
     public function __toString(){
         return "$this->id_inscription \n
-        $this->membre \n
-        $this->plan_inscription \n
+        $this->id_membre \n
+        $this->id_plan_inscription \n
         $this->date_inscription \n
         $this->etat";
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            "id_inscription" => $this->id_inscription,
+            'id_membre' => $this->id_membre,
+            "id_plan_inscription" => $this->id_plan_inscription,
+            "etat" => $this->etat
+        ];
     }
 
    
