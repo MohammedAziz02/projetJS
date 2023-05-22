@@ -3,17 +3,9 @@ import getXhr from "./xhrobject";
 const xhr = getXhr();
 
 
-
-
-
-
-
-
-
-
 //---------------------------------- get all plan d'inscriptions pour les affichés-------------------------------------------------//
 
-function getAllInscriptionsPlans() {
+export function getAllInscriptionsPlans() {
     const formData = new FormData();
     formData.append("action", 'afficherTous');
     xhr.open("POST", "../Controllers/traitementPlanInscription.php", true);

@@ -15,8 +15,8 @@ if ($action == "ajouterplaninscription") {
     $planinscription = new PlanInscription($nomplan, $descriptionplan, $prixplan);
     PlanInscriptionDAO::createPlanInscription($planinscription);
 } elseif ($action == "afficherTous") {
-    $palnsInscriptions = PlanInscriptionDAO::getPlanInscriptionByAll("");
-    echo json_encode($palnsInscriptions);
+    $plansInscriptions = PlanInscriptionDAO::getPlanInscriptionByAll("");
+    echo json_encode($plansInscriptions);
 } elseif ($action == "modifierplan") {
     
     $planinscription = PlanInscriptionDAO::getPlanInscriptionById($id);

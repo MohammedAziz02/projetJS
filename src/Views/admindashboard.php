@@ -48,15 +48,15 @@
 
 
 
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" name="search" id="search"
-                                placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" id="searchButton" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-0 small" name="search" id="search"
+                            placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" id="searchButton" type="button">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
                         </div>
+                    </div>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -144,7 +144,7 @@
     <!-- Custom scripts for all pages-->
     <script src="../../public/js/sb-admin-2.min.js"></script>
 
-    <script src="../../public/js/scriptforPlanInscription.js"  type="module"></script>
+    <script src="../../public/js/scriptforPlanInscription.js" type="module"></script>
 
     <script>
     function getXhr() {
@@ -166,151 +166,291 @@
         return xhr;
     }
 
-  
+
     const xhr = getXhr();
-
-
-    function getAllMembres() {
+    /////////////////////////////////////////////////////////////
+    function getAllInscriptionsPlans() {
         const formData = new FormData();
-        formData.append("action", 'afficherTousmembres');
-        xhr.open("POST", "../Controllers/test.php", true);
+        formData.append("action", 'afficherTous');
+        xhr.open("POST", "../Controllers/traitementPlanInscription.php", true);
         xhr.send(formData);
         xhr.addEventListener("readystatechange", () => {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // Request succeeded
                 var response = JSON.parse(xhr.responseText);
                 console.log(response);
-                var tableContainer = document.getElementById('table-container');
+                fetchPlanInscriptions(response);
+            }
+        })
+    }
+    //fetch membres selon la reponse
+    function fetchMembres(response) {
+        var tableContainer = document.getElementById('table-container');
 
 
-                // Clear existing content
-                tableContainer.innerHTML = '';
+        // Clear existing content
+        tableContainer.innerHTML = '';
 
-                // Create and populate the table
-                var table = document.createElement('table');
-                table.classList.add('table', 'table-striped', 'table-hover');
-
-
-                // Create the table header
-                var headerRow = table.insertRow();
-
-                var Id = headerRow.insertCell();
-                Id.textContent = 'Id';
-                Id.classList.add("text-center");
-
-                var Nom = headerRow.insertCell();
-                Nom.textContent = 'Nom';
-                Nom.classList.add("text-center");
-
-                var Prenom = headerRow.insertCell();
-                Prenom.textContent = 'Prenom';
-                Prenom.classList.add("text-center");
-
-                var Adresse = headerRow.insertCell();
-                Adresse.textContent = 'Adresse';
-                Adresse.classList.add("text-center");
+        // Create and populate the table
+        var table = document.createElement('table');
+        table.classList.add('table', 'table-striped', 'table-hover');
 
 
-                var Email = headerRow.insertCell();
-                Email.textContent = 'Email';
-                Email.classList.add("text-center");
+        // Create the table header
+        var headerRow = table.insertRow();
 
-                var Telephone = headerRow.insertCell();
-                Telephone.textContent = 'Telephone';
-                Telephone.classList.add("text-center");
+        var Id = headerRow.insertCell();
+        Id.textContent = 'Id';
+        Id.classList.add("text-center");
 
-                var Action = headerRow.insertCell();
-                Action.textContent = 'Action';
-                Action.colSpan = 2;
-                Action.classList.add("text-center")
+        var Nom = headerRow.insertCell();
+        Nom.textContent = 'Nom';
+        Nom.classList.add("text-center");
 
+        var Prenom = headerRow.insertCell();
+        Prenom.textContent = 'Prenom';
+        Prenom.classList.add("text-center");
 
-                // ... add more header cells for other member properties
-
-                for (var i = 0; i < response.length; i++) {
-                    var member = response[i];
-                    var row = table.insertRow();
-
-                    // Add the member data to the table cells
-                    var cell1 = row.insertCell();
-                    cell1.textContent = member.id_membre;
-                    cell1.classList.add("text-center");
-
-                    var cell2 = row.insertCell();
-                    cell2.textContent = member.nom;
-                    cell2.classList.add("text-center");
-
-                    var cell3 = row.insertCell();
-                    cell3.textContent = member.prenom;
-                    cell3.classList.add("text-center");
+        var Adresse = headerRow.insertCell();
+        Adresse.textContent = 'Adresse';
+        Adresse.classList.add("text-center");
 
 
-                    var cell4 = row.insertCell();
-                    cell4.textContent = member.adresse;
-                    cell4.classList.add("text-center");
-                    var cell5 = row.insertCell();
-                    cell5.textContent = member.email;
-                    cell5.classList.add("text-center");
+        var Email = headerRow.insertCell();
+        Email.textContent = 'Email';
+        Email.classList.add("text-center");
 
-                    var cell6 = row.insertCell();
-                    cell6.textContent = member.telephone;
-                    cell6.classList.add("text-center");
+        var Telephone = headerRow.insertCell();
+        Telephone.textContent = 'Telephone';
+        Telephone.classList.add("text-center");
 
-
-                    var modifierCell = row.insertCell();
-                    var modifierButton = document.createElement('button');
-                    modifierButton.setAttribute("data-toggle", "modal");
-                    modifierButton.setAttribute("data-target", "#modalModifierMembre");
-                    modifierButton.textContent = 'Modifier';
-                    modifierButton.classList.add('btn', 'btn-success');
-                    modifierCell.appendChild(modifierButton);
-                    modifierCell.classList.add('text-center');
-                    modifierButton.addEventListener("click", (e) => {
-                        const elem = e.target.parentElement.parentElement.children;
-                        var modalNom = document.getElementById('modalNom');
-                        idMembre.value = elem[0].innerText;
-                        modalNom.value = elem[1].innerText;
-                        prenom.value = elem[2].innerText;
-                        adresse.value = elem[3].innerText;
-                        email.value = elem[4].innerText;
-                        telephone.value = elem[5].innerText;
-                    });
+        var Action = headerRow.insertCell();
+        Action.textContent = 'Action';
+        Action.colSpan = 2;
+        Action.classList.add("text-center")
 
 
+        // ... add more header cells for other member properties
 
-                    
-                    var supprimerCell = row.insertCell();
-                    var supprimerButton = document.createElement('button');
-                    supprimerButton.textContent = 'Supprimer';
-                    supprimerButton.classList.add('btn', 'btn-danger');
-                    supprimerCell.appendChild(supprimerButton);
-                    supprimerCell.classList.add('text-center');
-                    //on doit tout d'abord ajouter les attributs pour addentifier le modal de confirmation de suppression
-                    supprimerButton.setAttribute('data-toggle', 'modal');
-                    supprimerButton.setAttribute('data-target', '#supprimerModal');
-                    //ici c'est l'évenement de button supprimer qu'on on clique sur la button le modal de confirmation de suppression pop up
-                    // il contient déja une button donc on doit faire une nouvelle event sur la button supprimer de button
-                    supprimerButton.addEventListener("click", (e) => {
-                        //ici on identifie le button supprimer du modal et on fait alors la logique du suppression
-                        var confirmDeleteButton = document.getElementById('confirmDelete');
-                        confirmDeleteButton.addEventListener('click', function() {
-                            const elem = e.target.parentElement.parentElement.firstChild;
-                            const formData = new FormData();
-                            formData.append("id", elem.innerText);
-                            formData.append("action", "supprimer");
-                            xhr.open("POST", "../Controllers/traitementMembre.php", true);
-                            xhr.send(formData);
+        for (var i = 0; i < response.length; i++) {
+            var member = response[i];
+            var row = table.insertRow();
 
-                            // mn b3d ma lmodal kaytl3 khsna mn b3d mancliquiw 3la supprimer lmodel ymchi mayb9ach donc khsna nzido 
-                            $('#supprimerModal').modal('hide');
-                            getAllMembres();
+            // Add the member data to the table cells
+            var cell1 = row.insertCell();
+            cell1.textContent = member.id_membre;
+            cell1.classList.add("text-center");
 
-                        });
+            var cell2 = row.insertCell();
+            cell2.textContent = member.nom;
+            cell2.classList.add("text-center");
 
-                    })
+            var cell3 = row.insertCell();
+            cell3.textContent = member.prenom;
+            cell3.classList.add("text-center");
 
-                    tableContainer.appendChild(table);
-                }
+
+            var cell4 = row.insertCell();
+            cell4.textContent = member.adresse;
+            cell4.classList.add("text-center");
+            var cell5 = row.insertCell();
+            cell5.textContent = member.email;
+            cell5.classList.add("text-center");
+
+            var cell6 = row.insertCell();
+            cell6.textContent = member.telephone;
+            cell6.classList.add("text-center");
+
+
+            var modifierCell = row.insertCell();
+            var modifierButton = document.createElement('button');
+            modifierButton.setAttribute("data-toggle", "modal");
+            modifierButton.setAttribute("data-target", "#modalModifierMembre");
+            modifierButton.textContent = 'Modifier';
+            modifierButton.classList.add('btn', 'btn-success');
+            modifierCell.appendChild(modifierButton);
+            modifierCell.classList.add('text-center');
+            modifierButton.addEventListener("click", (e) => {
+                const elem = e.target.parentElement.parentElement.children;
+                var modalNom = document.getElementById('modalNom');
+                idMembre.value = elem[0].innerText;
+                modalNom.value = elem[1].innerText;
+                prenom.value = elem[2].innerText;
+                adresse.value = elem[3].innerText;
+                email.value = elem[4].innerText;
+                telephone.value = elem[5].innerText;
+            });
+
+
+
+
+            var supprimerCell = row.insertCell();
+            var supprimerButton = document.createElement('button');
+            supprimerButton.textContent = 'Supprimer';
+            supprimerButton.classList.add('btn', 'btn-danger');
+            supprimerCell.appendChild(supprimerButton);
+            supprimerCell.classList.add('text-center');
+            //on doit tout d'abord ajouter les attributs pour addentifier le modal de confirmation de suppression
+            supprimerButton.setAttribute('data-toggle', 'modal');
+            supprimerButton.setAttribute('data-target', '#supprimerModal');
+            //ici c'est l'évenement de button supprimer qu'on on clique sur la button le modal de confirmation de suppression pop up
+            // il contient déja une button donc on doit faire une nouvelle event sur la button supprimer de button
+            supprimerButton.addEventListener("click", (e) => {
+                //ici on identifie le button supprimer du modal et on fait alors la logique du suppression
+                var confirmDeleteButton = document.getElementById('confirmDelete');
+                confirmDeleteButton.addEventListener('click', function() {
+                    const elem = e.target.parentElement.parentElement.firstChild;
+                    const formData = new FormData();
+                    formData.append("id", elem.innerText);
+                    formData.append("action", "supprimer");
+                    xhr.open("POST", "../Controllers/traitementMembre.php", true);
+                    xhr.send(formData);
+
+                    // mn b3d ma lmodal kaytl3 khsna mn b3d mancliquiw 3la supprimer lmodel ymchi mayb9ach donc khsna nzido 
+                    $('#supprimerModal').modal('hide');
+                    getAllMembres();
+
+                });
+
+            })
+
+            tableContainer.appendChild(table);
+        }
+    };
+
+    //fetch planInscriptions selon la reponse
+    function fetchPlanInscriptions(response) {
+        var tableContainer = document.getElementById('table-container');
+
+
+        // Clear existing content
+        tableContainer.innerHTML = '';
+
+        // Create and populate the table
+        var table = document.createElement('table');
+        table.classList.add('table', 'table-striped', 'table-hover');
+
+
+        // Create the table header
+        var headerRow = table.insertRow();
+
+        var Id = headerRow.insertCell();
+        Id.textContent = 'Id';
+        Id.classList.add("text-center");
+
+        var Nom = headerRow.insertCell();
+        Nom.textContent = 'Nom du Plan';
+        Nom.classList.add("text-center");
+
+        var description = headerRow.insertCell();
+        description.textContent = 'Description';
+        description.classList.add("text-center");
+
+        var prix = headerRow.insertCell();
+        prix.textContent = 'Prix';
+        prix.classList.add("text-center");
+
+        var Action = headerRow.insertCell();
+        Action.textContent = 'Action';
+        Action.colSpan = 2;
+        Action.classList.add("text-center")
+
+
+
+        // ... add more header cells for other member properties
+
+        for (var i = 0; i < response.length; i++) {
+            var plan = response[i];
+            var row = table.insertRow();
+
+            // Add the plan data to the table cells
+            var cell1 = row.insertCell();
+            cell1.textContent = plan.idPlanInscription;
+            cell1.classList.add("text-center");
+
+            var cell2 = row.insertCell();
+            cell2.textContent = plan.nom;
+            cell2.classList.add("text-center");
+
+            var cell3 = row.insertCell();
+            cell3.textContent = plan.description;
+            cell3.classList.add("text-center");
+
+
+            var cell4 = row.insertCell();
+            cell4.textContent = plan.prix;
+            cell4.classList.add("text-center");
+
+
+            var modifierCell = row.insertCell();
+            var modifierButton = document.createElement('button');
+            modifierButton.setAttribute("data-toggle", "modal");
+            // ajouter l'id du Modal ici
+            modifierButton.setAttribute("data-target", "#modalmodifierPlanInscription");
+            modifierButton.textContent = 'Modifier';
+            modifierButton.classList.add('btn', 'btn-success');
+            modifierCell.appendChild(modifierButton);
+            modifierCell.classList.add('text-center');
+            modifierButton.addEventListener("click", (e) => {
+                const elem = e.target.parentElement.parentElement.children;
+
+                idPlan.value = elem[0].innerText;
+                nomplan.value = elem[1].innerText;
+                descriptionplan.value = elem[2].innerText;
+                prixplan.value = elem[3].innerText;
+            });
+
+
+
+
+            var supprimerCell = row.insertCell();
+            var supprimerButton = document.createElement('button');
+            supprimerButton.textContent = 'Supprimer';
+            supprimerButton.classList.add('btn', 'btn-danger');
+            supprimerCell.appendChild(supprimerButton);
+            supprimerCell.classList.add('text-center');
+            //on doit tout d'abord ajouter les attributs pour addentifier le modal de confirmation de suppression
+            supprimerButton.setAttribute('data-toggle', 'modal');
+            supprimerButton.setAttribute('data-target', '#supprimerModal');
+            //ici c'est l'évenement de button supprimer qu'on on clique sur la button le modal de confirmation de suppression pop up
+            // il contient déja une button donc on doit faire une nouvelle event sur la button supprimer de button
+            supprimerButton.addEventListener("click", (e) => {
+                //ici on identifie le button supprimer du modal et on fait alors la logique du suppression
+                var confirmDeleteButton = document.getElementById('confirmDelete');
+                confirmDeleteButton.addEventListener('click', function() {
+                    const elem = e.target.parentElement.parentElement.firstChild;
+                    const formData = new FormData();
+                    formData.append("id", elem.innerText);
+                    formData.append("action", "supprimer");
+                    xhr.open("POST", "../Controllers/traitementPlanInscription.php", true);
+                    xhr.send(formData);
+
+                    // mn b3d ma lmodal kaytl3 khsna mn b3d mancliquiw 3la supprimer lmodel ymchi mayb9ach donc khsna nzido 
+                    $('#supprimerModal').modal('hide');
+                    getAllInscriptionsPlans();
+
+                });
+
+            })
+
+            tableContainer.appendChild(table);
+        }
+    }
+
+
+    ////////////////////////////////////////////////////////////
+
+    function getAllMembres() {
+        const formData = new FormData();
+        formData.append("action", 'afficherTous');
+        xhr.open("POST", "../Controllers/traitementMembre.php", true);
+        xhr.send(formData);
+        xhr.addEventListener("readystatechange", () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Request succeeded
+                var response = JSON.parse(xhr.responseText);
+                fetchMembres(response);
+                //console.log(response);
             }
         })
 
@@ -336,29 +476,45 @@
         getAllMembres();
     });
     document.getElementById("afficher-membre-btn").addEventListener("click", () => {
-        type="membre";
+        type = "membre";
         getAllMembres();
     });
-    document.getElementById("afficher-plan-btn").addEventListener("click", () => {
-        type="planInscription";
-        getAllMembres();
+    document.getElementById("btnafficherPlans").addEventListener("click", () => {
+        type = "planInscription";
+        getAllInscriptionsPlans();
     });
-    
-    // searching
-        var type="membre";
-    const searchButton = document.getElementById("searchButton");
-    searchButton.addEventListener("click",(e)=>{
-        var searchValue=document.getElementById("search").value;
-        console.log(searchValue);
-        if(xhr.readyState==4 && xhr.status==200){
-            console.log(xhr.responseText);
-        }
-        var formData= new FormData();
-        formData.append("type",type);
-        formData.append("search",searchValue);
-        formData.append("action","search");
 
-        xhr.open("POST","../Controllers/traitementMembre.php");
+    // searching
+    var type;
+    var response;
+    var tableContainer = document.getElementById('table-container');
+    const searchButton = document.getElementById("searchButton");
+    searchButton.addEventListener("click", (e) => {
+        var searchValue = document.getElementById("search").value;
+        console.log(searchValue);
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // console.log(xhr.responseText);
+            if (type === "planInscription") {
+                console.log(type);
+                // Request succeeded
+                response = JSON.parse(xhr.responseText);
+                fetchPlanInscriptions(response);
+                // console.log(response);
+
+            } else if (type === "membre") {
+                console.log(type);
+                response = JSON.parse(xhr.responseText);
+                fetchMembres(response);
+                console.log(response);
+            }
+
+        }
+        var formData = new FormData();
+        formData.append("type", type);
+        formData.append("search", searchValue);
+        formData.append("action", "search");
+
+        xhr.open("POST", "../Controllers/traitementMembre.php");
         xhr.send(formData);
 
         //

@@ -200,6 +200,6 @@ searchButton.addEventListener("click", (e) => {
 
     xhr.open("POST", "../Controllers/traitementMembre.php");
     xhr.send(formData);
-
+}
 
 
