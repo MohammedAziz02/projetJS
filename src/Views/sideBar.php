@@ -10,7 +10,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="./admindashboard.php">
 
             <span>Dashboard Admin</span></a>
     </li>
@@ -60,7 +60,7 @@
         <div id="Inscription" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Actions:</h6>
-                <a class="collapse-item" href="utilities-color.html">Gérer les inscriptions:</a>
+                <a class="collapse-item" id="btn-gerer-inscription-admin">Gérer les inscriptions:</a>
             </div>
         </div>
     </li>

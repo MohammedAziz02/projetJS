@@ -14,35 +14,33 @@ $motdepasse = isset($_POST["motdepasse"]) ? $_POST["motdepasse"] : "";
 session_start();
 
 
-if (isset($_POST["connexion"])) {
-    if (empty($email) || empty($motdepasse)) {
-        $message = "veuillez vérifier que vous avez remplis tous les champs";
+if (!empty($email) && !empty($motdepasse)) {
+    $admin = AdminDAO::getAdminByEmail($email);
+    if ($admin != null) {
+        if ($admin->getpassword() != $motdepasse) {
+            $message = "mot de passe incorrect ";
+        } else {
+            echo "l9ah";
+            $_SESSION["user"] = $admin;
+            header("Refresh:1;url=admindashboard.php");
+        }
     } else {
-        $admin = AdminDAO::getAdminByEmail($email);
-        if ($admin != null) {
-            if ($admin->getpassword() != $motdepasse) {
+        $member = MembreDao::getMembreByEmail($email);
+        if ($member != null) {
+            if ($member->getpassword() != $motdepasse) {
                 $message = "mot de passe incorrect ";
             } else {
-                echo "l9ah";
-                $_SESSION["user"] = $admin;
-                header("Refresh:1;url=admindashboard.php");
+                echo "user";
+                $_SESSION["user"] = $member;
+                header("Refresh:1;url=membredashboard.php");
             }
         } else {
-            $member = MembreDao::getMembreByEmail($email);
-            if ($member != null) {
-                if ($member->getpassword() != $motdepasse) {
-                    $message = "mot de passe incorrect ";
-                } else {
-                    echo "user";
-                    $_SESSION["user"] = $member;
-                    header("Refresh:1;url=membredashboard.php");
-                }
-            } else {
-                $message = "email ou mot de passe non valides";
-            }
+            $message = "email ou mot de passe non valides";
         }
     }
 }
+
+
 
 
 
@@ -109,7 +107,7 @@ if (isset($_POST["connexion"])) {
                                         <span id="motdepasseerror"></span>
                                     </div>
 
-                                    <input type="submit" name="connexion" class="btn btn-primary col-12" name="connexion" value="connexion" />
+                                    <input type="submit" class="btn btn-primary col-12" name="connexion" value="connexion" />
                                 </form>
                             </div>
                         </div>
@@ -131,40 +129,28 @@ if (isset($_POST["connexion"])) {
 
     <script>
         document.getElementById("myform").addEventListener("submit", (e) => {
-            // e.preventDefault();
+            e.preventDefault();
             // Get form input values
-
             var email = document.getElementById("email").value;
-
             var motdepasse = document.getElementById("motdepasse").value;
-
-
             // Clear previous error messages
-
             document.getElementById("emailerror").innerHTML = "";
             document.getElementById("motdepasseerror").innerHTML = "";
-
-
             // Perform validation
             var isValid = true;
-
-
-
             if (email === "") {
-                document.getElementById("emailerror").innerHTML = "Veuillez entrer votre adresse email.";
+                document.getElementById("emailerror").innerHTML = "<p class='alert alert-danger text-center m-1'> Veuillez entrer votre adresse email.</p>";
                 isValid = false;
             }
-
-
-
             if (motdepasse === "") {
-                document.getElementById("motdepasseerror").innerHTML = "Veuillez entrer votre mot de passe.";
+                document.getElementById("motdepasseerror").innerHTML = "<p class='alert alert-danger text-center m-1'>Veuillez entrer votre mot de passe.</p>";
                 isValid = false;
             }
 
             // If form is valid, submit the form
             if (isValid) {
-                event.target.submit();
+                console.log("trueeeeee");
+                e.target.submit();
             }
 
         })

@@ -122,37 +122,37 @@
             var isValid = true;
 
             if (nom === "") {
-                document.getElementById("nomerror").innerHTML = "Veuillez entrer votre nom.";
+                document.getElementById("nomerror").innerHTML = "<p class='alert alert-danger text-center m-1'> Veuillez entrer votre nom.";
                 isValid = false;
             }
 
             if (prenom === "") {
-                document.getElementById("prenomerror").innerHTML = "Veuillez entrer votre prénom.";
+                document.getElementById("prenomerror").innerHTML = "<p class='alert alert-danger text-center m-1'>Veuillez entrer votre prénom.";
                 isValid = false;
             }
 
             if (adresse === "") {
-                document.getElementById("adresseerror").innerHTML = "Veuillez entrer votre adresse.";
+                document.getElementById("adresseerror").innerHTML = "<p class='alert alert-danger text-center m-1'>Veuillez entrer votre adresse.</p>";
                 isValid = false;
             }
 
             if (email === "") {
-                document.getElementById("emailerror").innerHTML = "Veuillez entrer votre adresse email.";
+                document.getElementById("emailerror").innerHTML = "<p class='alert alert-danger text-center m-1'>Veuillez entrer votre adresse email.</p>";
                 isValid = false;
             }
 
             if (telephone === "") {
-                document.getElementById("telephoneerror").innerHTML = "Veuillez entrer votre numéro de téléphone.";
+                document.getElementById("telephoneerror").innerHTML = "<p class='alert alert-danger text-center m-1'>Veuillez entrer votre numéro de téléphone.</p>";
                 isValid = false;
             }
 
             if (motdepasse === "") {
-                document.getElementById("motdepasseerror").innerHTML = "Veuillez entrer votre mot de passe.";
+                document.getElementById("motdepasseerror").innerHTML = "<p class='alert alert-danger text-center m-1'>Veuillez entrer votre mot de passe.</p>";
                 isValid = false;
             }
 
             if (motdepasse !== motdepasse1) {
-                document.getElementById("motdepasseerror1").innerHTML = "Les mots de passe ne correspondent pas.";
+                document.getElementById("motdepasseerror1").innerHTML = "<p class='alert alert-danger text-center m-1'>Les mots de passe ne correspondent pas.</p>";
                 isValid = false;
             }
 

@@ -39,7 +39,7 @@ class AdminDAO {
 
                 return $membre;
             } else {
-                echo "here";
+                // echo "here";
                 return null;
             }
         } catch (PDOException $e) {

@@ -13,16 +13,19 @@
                     <div class="form-group">
                         <label for="nom">Nom:</label>
                         <input type="text" class="form-control" id="nom" name="nomplan" placeholder="Entrer un nom:">
+                        <span id="nomerror"></span>
 
                     </div>
                     <div class="form-group">
                         <label for="description">Description:</label>
                         <input type="text" class="form-control" id="description" name="descriptionplan" placeholder="description...">
+                        <span id="descritpionerror"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="prix">Prix:</label>
                         <input type="number" class="form-control" id="prix" name="prixplan" placeholder="Prix...">
+                        <span id="prixerror"></span>
                     </div>
 
                     <button type="submit" class="btn btn-primary" id="ajouterPlandinscription" >Ajouter</button>

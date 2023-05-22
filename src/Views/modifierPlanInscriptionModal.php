@@ -17,17 +17,17 @@
                     <div class="form-group">
                         <label for="nom">Nom du Plan:</label>
                         <input type="text" class="form-control" name="nomplan" id="nomplan" placeholder="Nom du plan ....">
-
+                        <span id="nomerrormodifier"></span>
                     </div>
                     <div class="form-group">
                         <label for="nom">Descitpion:</label>
                         <input type="text" class="form-control" name="descriptionplan"  id="descriptionplan" placeholder="description...">
-
+                        <span id="descritpionerrormodifier"></span>
                     </div>
                     <div class="form-group">
                         <label for="nom">Prix:</label>
                         <input type="number" class="form-control" name="prixplan" id="prixplan" placeholder="prix....">
-
+                        <span id="prixerrormodifier"></span>
                     </div>
 
 

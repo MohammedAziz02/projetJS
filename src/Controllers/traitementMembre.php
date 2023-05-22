@@ -56,7 +56,8 @@ else if($action=='search'){
         $planInscription=PlanInscriptionDAO::getPlanInscriptionByAll($search);
         echo json_encode($planInscription);
     }else if($type=='inscription'){
-        $inscription=InscriptionDAO::getInscriptionByAll($search);
+        // $inscription=InscriptionDAO::getInscriptionByAll($search);
+        $inscription=InscriptionDAO::getInscriptionByAllJointure($search);
         echo json_encode($inscription);
     }
 }

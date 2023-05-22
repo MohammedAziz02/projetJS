@@ -1,10 +1,6 @@
 import getXhr from "./xhrobject";
-
 const xhr = getXhr();
-
-
 //---------------------------------- get all plan d'inscriptions pour les affichés-------------------------------------------------//
-
 export function getAllInscriptionsPlans() {
     const formData = new FormData();
     formData.append("action", 'afficherTous');
@@ -16,8 +12,6 @@ export function getAllInscriptionsPlans() {
             var response = JSON.parse(xhr.responseText);
             console.log(response);
             var tableContainer = document.getElementById('table-container');
-
-
             // Clear existing content
             tableContainer.innerHTML = '';
 
@@ -142,47 +136,103 @@ btnafficherPlans.addEventListener("click", () => {
     getAllInscriptionsPlans();
 })
 
+// ------------------------------ function pour la validation de la formulaire d'ajout d'un plan d'inscription ------------------------------//
 
-//-------------------------------------------ajout un plan d'inscription-------------------------------------------------//
+function validerFormPlanInscription(champnom,champdescription,champprix,champnomerror,champdescriptionerror,champprixerror){
+    let is_valid = true;
+    // on va verifier si le formulaire est valide ou non
+    // mettre les messages d'erreur à vide
+    champnomerror.innerHTML = "";
+    champdescriptionerror.innerHTML = "";
+    champprixerror.innerHTML = "";
+    // on va verifier si le formulaire est valide ou non    
+    // le formaulaire d'ajout d'un plan d'inscription a comme id de nom=nom
+    if (champnom.value == "") {
+        is_valid = false;
+        champnomerror.innerHTML = "<p class='alert alert-danger mt-1 text-center'>veuillez remplir le champs du nom</p>"
+    }
+    // le formaulaire d'ajout d'un plan d'inscription a comme id de description=description
+    if (champdescription.value == "") {
+        is_valid = false;
+        champdescriptionerror.innerHTML = "<p class='alert alert-danger mt-1 text-center'>veuillez remplir le champs du description</p>"
+
+    }
+    // le formaulaire d'ajout d'un plan d'inscription a comme id de prix=prix
+    if (champprix.value == "") {
+        is_valid = false;
+        champprixerror.innerHTML = "<p class='alert alert-danger mt-1 text-center'>veuillez remplir le champs du prix</p>"
+    }
+
+    return is_valid;
+}
 
 
+//-------------------------------------------ajout un plan d'inscription && validation de formulaire-------------------------------------------------//
 var btnajouterplanInscription = document.getElementById("ajouterPlandinscription");
 var formulairedePlanInscription = document.getElementById("formulairePlanInscription");
 
 btnajouterplanInscription.addEventListener('click', (e) => {
-    typeObject.type = "planInscription";
+    // typeObject.type = "planInscription";
+
     e.preventDefault();
-    const formData = new FormData(formulairedePlanInscription);
-    formData.append("action", 'ajouterplaninscription'); 
-    xhr.open("POST", "../Controllers/traitementPlanInscription.php", true);
-    xhr.send(formData);
-    formulairedePlanInscription.reset();
-    $("#modalAjouterPlanInscription").modal('hide');
-    getAllInscriptionsPlans();
+    var nom=document.getElementById("nom");
+    var description=document.getElementById("description");
+    var prix=document.getElementById("prix");
+    var nomerror=document.getElementById("nomerror");
+    var descritpionerror=document.getElementById("descritpionerror");
+    var prixerror=document.getElementById("prixerror");
+
+    // appel de la methode de validation de formulaire qui retourne true or false
+    var is_valid= validerFormPlanInscription(nom,description,prix,nomerror,descritpionerror,prixerror)
+    // si la formulaire est valide alors on peut faire l'ajax
+    if (is_valid) {
+        const formData = new FormData(formulairedePlanInscription);
+        formData.append("action", 'ajouterplaninscription');
+        xhr.open("POST", "../Controllers/traitementPlanInscription.php", true);
+        xhr.send(formData);
+        formulairedePlanInscription.reset();
+        $("#modalAjouterPlanInscription").modal('hide');
+        getAllInscriptionsPlans();
+    }
 
 })
-
 
 //---------------------------------------modifier un plan d'inscription -----------------------------
 var modfierPlanInscriptionbtninModal = document.getElementById('modfierPlanInscriptionbtninModal');
 modfierPlanInscriptionbtninModal.addEventListener("click", (e) => {
-    typeObject.type = "planInscription";
+    // typeObject.type = "planInscription";
     e.preventDefault();
-    console.log('clicked me');
-    var formulaireplaninscription = document.getElementById("formulaireModifierPlanInscription");
 
+    // avoir tous les champs de formulaire soit de input soit d'erreur
+    var nomplan=document.getElementById("nomplan");
+    var descriptionplan=document.getElementById("descriptionplan");
+    var prixplan=document.getElementById("prixplan");
+    var nomerror=document.getElementById("nomerrormodifier");
+    var descritpionerrormodifier=document.getElementById("descritpionerrormodifier");
+    var prixerrormodifier=document.getElementById("prixerrormodifier");
 
-    var formData = new FormData(formulaireplaninscription);
-    formData.append("action", "modifierplan");
-    console.log(formData);
-    xhr.open("POST", "../Controllers/traitementPlanInscription.php", true);
-    xhr.send(formData);
+    // appel à la méthode validerFormPlanInscription
+    var is_valid=validerFormPlanInscription(nomplan,descriptionplan,prixplan,nomerror,descritpionerrormodifier,prixerrormodifier)
 
-    formulaireplaninscription.reset();
-    $('#modalmodifierPlanInscription').modal('hide');
-    getAllInscriptionsPlans();
+    if (is_valid) {
+        var formulaireplaninscription = document.getElementById("formulaireModifierPlanInscription");
+        var formData = new FormData(formulaireplaninscription);
+        formData.append("action", "modifierplan");
+        console.log(formData);
+        xhr.open("POST", "../Controllers/traitementPlanInscription.php", true);
+        xhr.send(formData);
 
+        formulaireplaninscription.reset();
+        $('#modalmodifierPlanInscription').modal('hide');
+        getAllInscriptionsPlans();
+
+    }
 });
+
+
+
+
+
 
 
 

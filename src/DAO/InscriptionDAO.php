@@ -11,7 +11,7 @@ use gestionclub\DAO\MembreDao;
 use gestionclub\Models\Membre;
 use gestionclub\Models\PlanInscription;
 use gestionclub\DAO\PlanInscriptionDAO;
-// require __DIR__ . "/../../vendor/autoload.php";
+require __DIR__ . "/../../vendor/autoload.php";
 
 
 class InscriptionDAO {
@@ -160,5 +160,79 @@ class InscriptionDAO {
             return false;
         }
     }
+
+
+    public static function getAllInscriptionWithJointureMembreAndPlanInscription(){
+
+        try {
+
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "SELECT * from inscription i INNER JOIN membre m on i.id_Membre=m.id_membre INNER JOIN planinscription p on p.idPlanInscription=i.id_planInscription";
+            $stmt = self::$db->prepare($query);
+            $stmt->execute();
+
+            $planinscriptions=array();
+
+            while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+                 if ($result) {
+                   array_push($planinscriptions,$result); } 
+                }
+            return $planinscriptions;
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            return null;
+        }
+    
+    }
+
+    public static function confirmInscriptionforamember($id){
+        try {
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "UPDATE Inscription SET etat = ? WHERE id_Inscription = ?";
+            $stmt = self::$db->prepare($query);
+            $stmt->execute([
+                "confirmé",
+                $id
+            ]);
+
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+
+    }
+
+
+
+    public static function getInscriptionByAllJointure($word){
+        try {
+
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "SELECT * from inscription i INNER JOIN membre m on i.id_Membre=m.id_membre INNER JOIN planinscription p on p.idPlanInscription=i.id_planInscription
+            WHERE i.id_membre like ? or i.id_planInscription like ? or i.id_Inscription like ? or i.date_inscription like ? or i.etat  like ? or m.nom like ? or m.prenom like ? or m.email like ? or m.telephone like ? or m.adresse like ?
+             or p.nomPlanInscription like ? or p.description like ? or p.prix like ?";
+            $stmt = self::$db->prepare($query);
+            $stmt->execute(["%".$word."%","%".$word."%","%".$word."%","%".$word."%","%".$word."%","%".$word."%","%".$word."%","%".$word."%","%".$word."%","%".$word."%","%".$word."%","%".$word."%","%".$word."%"]);
+            $data=array();
+            while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+                if ($result) {
+                    array_push($data,$result);
+                } 
+            }
+            return $data;
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            return null;
+        }
+    }
+
+
 }
-?>
