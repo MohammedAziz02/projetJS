@@ -134,8 +134,11 @@ export function getAllInscriptionsPlans() {
     })
 }
 
+import { typeObject } from "./type";
+
 var btnafficherPlans = document.getElementById("btnafficherPlans");
 btnafficherPlans.addEventListener("click", () => {
+    typeObject.type = "planInscription";
     getAllInscriptionsPlans();
 })
 
@@ -147,9 +150,10 @@ var btnajouterplanInscription = document.getElementById("ajouterPlandinscription
 var formulairedePlanInscription = document.getElementById("formulairePlanInscription");
 
 btnajouterplanInscription.addEventListener('click', (e) => {
+    typeObject.type = "planInscription";
     e.preventDefault();
     const formData = new FormData(formulairedePlanInscription);
-    formData.append("action", 'ajouterplaninscription');
+    formData.append("action", 'ajouterplaninscription'); 
     xhr.open("POST", "../Controllers/traitementPlanInscription.php", true);
     xhr.send(formData);
     formulairedePlanInscription.reset();
@@ -158,14 +162,16 @@ btnajouterplanInscription.addEventListener('click', (e) => {
 
 })
 
+
 //---------------------------------------modifier un plan d'inscription -----------------------------
 var modfierPlanInscriptionbtninModal = document.getElementById('modfierPlanInscriptionbtninModal');
 modfierPlanInscriptionbtninModal.addEventListener("click", (e) => {
+    typeObject.type = "planInscription";
     e.preventDefault();
     console.log('clicked me');
     var formulaireplaninscription = document.getElementById("formulaireModifierPlanInscription");
-  
-  
+
+
     var formData = new FormData(formulaireplaninscription);
     formData.append("action", "modifierplan");
     console.log(formData);
@@ -177,4 +183,10 @@ modfierPlanInscriptionbtninModal.addEventListener("click", (e) => {
     getAllInscriptionsPlans();
 
 });
+
+
+
+
+
+
 

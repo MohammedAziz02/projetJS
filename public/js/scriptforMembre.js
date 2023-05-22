@@ -156,6 +156,7 @@ function getAllMembres() {
 //------------------------------------------------------------------------------------------------//
 var modifierMembreInModal = document.getElementById('modifierMembreInModal');
 modifierMembreInModal.addEventListener("click", (e) => {
+    typeObject.type = "membre";
     e.preventDefault();
     const elem = e.target.parentElement.parentElement.children;
     console.log(elem[0].innerText);
@@ -179,27 +180,40 @@ modifierMembreInModal.addEventListener("click", (e) => {
 //--------------------------------------------------------------------------------------//
 
 document.getElementById("afficher-membre-btn").addEventListener("click", () => {
+    typeObject.type = "membre";
     getAllMembres();
 
 })
 
 
-var type = "membre";
+// var type = "membre";
+import { typeObject } from "./type";
+
 const searchButton = document.getElementById("searchButton");
 searchButton.addEventListener("click", (e) => {
-    type = "membre";
     var searchValue = document.getElementById("search").value;
     console.log(searchValue);
     if (xhr.readyState == 4 && xhr.status == 200) {
-        console.log(xhr.responseText);
+        var response = JSON.parse(xhr.responseText);
+       var arr= Object.keys( response[0]);
+       console.log("tt",arr);
+
+
     }
     var formData = new FormData();
-    formData.append("type", type);
+    formData.append("type", typeObject.type);
     formData.append("search", searchValue);
     formData.append("action", "search");
 
     xhr.open("POST", "../Controllers/traitementMembre.php");
     xhr.send(formData);
+<<<<<<< HEAD
 }
+=======
+});
+
+
+
+>>>>>>> e6659ed2958700f1df365be534cc821bcc07554b
 
 

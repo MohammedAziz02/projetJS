@@ -1,20 +1,47 @@
 <?php
 
-// use gestionclub\DAO\MembreDao;
+use gestionclub\DAO\AdminDAO;
+use gestionclub\DAO\MembreDao;
 
-// require __DIR__ . "/../../vendor/autoload.php";
+require __DIR__ . "/../../vendor/autoload.php";
 
-// session_start();
+// MembreDao::getMembreById(41);
 
-// $message = "";
 
-// print_r( $_POST);
+$email = isset($_POST["email"]) ? $_POST["email"] : "";
+$motdepasse = isset($_POST["motdepasse"]) ? $_POST["motdepasse"] : "";
 
-echo "mmm";
+session_start();
+
 
 if (isset($_POST["connexion"])) {
-    echo "jjajajaj";
-    
+    if (empty($email) || empty($motdepasse)) {
+        $message = "veuillez vérifier que vous avez remplis tous les champs";
+    } else {
+        $admin = AdminDAO::getAdminByEmail($email);
+        if ($admin != null) {
+            if ($admin->getpassword() != $motdepasse) {
+                $message = "mot de passe incorrect ";
+            } else {
+                echo "l9ah";
+                $_SESSION["user"] = $admin;
+                header("Refresh:1;url=admindashboard.php");
+            }
+        } else {
+            $member = MembreDao::getMembreByEmail($email);
+            if ($member != null) {
+                if ($member->getpassword() != $motdepasse) {
+                    $message = "mot de passe incorrect ";
+                } else {
+                    echo "user";
+                    $_SESSION["user"] = $member;
+                    header("Refresh:1;url=membredashboard.php");
+                }
+            } else {
+                $message = "email ou mot de passe non valides";
+            }
+        }
+    }
 }
 
 
@@ -45,6 +72,7 @@ if (isset($_POST["connexion"])) {
 <body class="d-flex flex-column h-100">
     <main class="flex-shrink-0">
         <!-- Navigation-->
+
         <?php require_once "./navbar.php"  ?>
 
 
@@ -62,11 +90,11 @@ if (isset($_POST["connexion"])) {
                         <div class="card shadow border-0 rounded-4 mb-5">
                             <div class="card-body p-5">
                                 <?php
-                                // if (isset($_SESSION["message"])) {
-                                // echo "<div class='alert alert-danger text-center'>" . $message . "</div>";
-                                // }
+                                if (isset($message)) {
+                                    echo "<div class='alert alert-danger text-center'>" . $message . "</div>";
+                                }
                                 ?>
-                                <form  method="post" id="myform">
+                                <form action="" method="post" id="myform">
 
 
                                     <div class="mb-3">
@@ -81,7 +109,7 @@ if (isset($_POST["connexion"])) {
                                         <span id="motdepasseerror"></span>
                                     </div>
 
-                                    <input type="submit" name="connexion" class="btn btn-primary col-12"  value="connexion" />
+                                    <input type="submit" name="connexion" class="btn btn-primary col-12" name="connexion" value="connexion" />
                                 </form>
                             </div>
                         </div>

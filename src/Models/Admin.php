@@ -23,6 +23,18 @@ class Admin {
         return $this->username;
     }
 
+    public function getNom() {
+        return $this->username;
+    }
+
+    public function getPrenom() {
+        return "";
+    }
+
+
+
+
+    
     public function getEmail(){
         return $this->email;
     }
