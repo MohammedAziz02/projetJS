@@ -763,6 +763,32 @@ if (!isset($_SESSION['user'])) {
             // on appele au méthode getAllInscriptionsAdmin pour afficher tous les inscriptions et les affichées dans le tableau
             getAllInscriptionsAdmin();
         });
+
+
+        var btnGain = document.getElementById("btnGain");
+        btnGain.addEventListener("click", () => {
+
+            if (date1.value && date1.value) {
+                xhr.addEventListener("readystatechange", () => {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var tableContainer = document.getElementById('table-container');
+                        tableContainer.innerHTML = "";
+                        tableContainer.innerHTML =  "<div class='alert alert-success text-center col-12 mt-2'>  Gain  :  " + xhr.responseText+ " DH </div>";
+
+                    };
+                });
+
+
+                var formData = new FormData();
+                formData.append("action", "sommeGain");
+                formData.append("date1", date1.value);
+                formData.append("date2", date2.value);
+
+                xhr.open("POST", "../Controllers/traitementMembre.php");
+                xhr.send(formData);
+            }
+
+        });
     </script>
 
 </body>

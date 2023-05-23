@@ -16,7 +16,7 @@ $id_Inscription = isset($_POST['id']) ? $_POST['id'] : NULL;
 
 if ($action == "ajouterInscription") {
     $inscription = new Inscription($idMembre, $idPlanInscription);
-    InscriptionDAO::createInscription($inscription);
+    echo InscriptionDAO::createInscription($inscription);   
     //echo "success";
 } elseif ($action == "afficherTous") {
     $inscriptions = PlanInscriptionDAO::getPlanInscriptionByAll("");

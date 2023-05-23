@@ -31,7 +31,6 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
     <link href="../../public/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-
     <!-- Custom styles for this template-->
     <link href="../../public/css/sb-admin-2.min.css" rel="stylesheet">
 
@@ -60,8 +59,6 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
                         <i class="fa fa-bars"></i>
                     </button>
 
-
-
                     <div class="input-group">
                         <input type="text" class="form-control bg-light border-0 small" name="search" id="search" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                         <div class="input-group-append">
@@ -74,15 +71,7 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-
-
-
                         <div class="topbar-divider d-none d-sm-block"></div>
-
-
-
-
-
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
@@ -92,7 +81,7 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" data-toggle="modal" data-target="#modalModifierProfil">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -115,9 +104,7 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
 
                     <div id="table-container">
 
-
                     </div>
-
 
                 </div>
                 <!-- /.container-fluid -->
@@ -134,7 +121,6 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
     <!-- c'est le modal de Logout -->
     <?php require "./LogoutModal.php" ?>
 
-
     <!-- c'est le modal de la formulaire ajouter Plan d'inscription -->
 
 
@@ -142,6 +128,8 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
 
 
     <?php require "./ModalSupprimerPlanInscription.php" ?>
+    <?php require "./ModalEchecChoixPlanInscription.php" ?>
+    <?php require "./ModalProfilModification.php" ?>
 
 
 
@@ -156,9 +144,9 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
 
     <!-- Custom scripts for all pages-->
     <script src="../../public/js/sb-admin-2.min.js"></script>
-    <!--
-    <script src="../../public/js/scriptforPlanInscription.js" type="module"></script>
--->
+
+    <script src="../../public/js/scriptforPlanInscription.js"></script>
+
     <script>
         function getXhr() {
             let xhr = null;
@@ -179,102 +167,11 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
             return xhr;
         }
 
-
         const xhr = getXhr();
         /////////////////////////////////////////////////////////////
         //fetch planInscriptions selon la reponse
         var response;
 
-        function fetchPlanInscriptionsForMembre(response) {
-            console.log("here");
-            var tableContainer = document.getElementById('table-container');
-
-
-            // Clear existing content
-            tableContainer.innerHTML = '';
-
-            // Create and populate the table
-            var table = document.createElement('table');
-            table.classList.add('table', 'table-striped', 'table-hover');
-
-
-            // Create the table header
-            var headerRow = table.insertRow();
-
-            var Id = headerRow.insertCell();
-            Id.textContent = 'Id';
-            Id.classList.add("text-center");
-
-            var Nom = headerRow.insertCell();
-            Nom.textContent = 'Nom du Plan';
-            Nom.classList.add("text-center");
-
-            var description = headerRow.insertCell();
-            description.textContent = 'Description';
-            description.classList.add("text-center");
-
-            var prix = headerRow.insertCell();
-            prix.textContent = 'Prix';
-            prix.classList.add("text-center");
-
-            var Action = headerRow.insertCell();
-            Action.textContent = 'Action';
-            Action.colSpan = 2;
-            Action.classList.add("text-center")
-
-
-            for (var i = 0; i < response.length; i++) {
-                var plan = response[i];
-                var row = table.insertRow();
-
-                // Add the plan data to the table cells
-                var cell1 = row.insertCell();
-                cell1.textContent = plan.idPlanInscription;
-                cell1.classList.add("text-center");
-
-                var cell2 = row.insertCell();
-                cell2.textContent = plan.nom;
-                cell2.classList.add("text-center");
-
-                var cell3 = row.insertCell();
-                cell3.textContent = plan.description;
-                cell3.classList.add("text-center");
-
-                var cell4 = row.insertCell();
-                cell4.textContent = plan.prix;
-                cell4.classList.add("text-center");
-
-                var choixCell = row.insertCell();
-                var choiceButton = document.createElement('button');
-                choiceButton.textContent = 'Choisir';
-                choiceButton.classList.add('btn', 'btn-primary');
-                choixCell.appendChild(choiceButton);
-                choixCell.classList.add('text-center');
-                //on doit tout d'abord ajouter les attributs pour addentifier le modal de confirmation de suppression
-                // choiceButton.setAttribute('data-toggle', 'modal');
-                // choiceButton.setAttribute('data-target', '#ModalChoisirPlanInscription');
-
-                choiceButton.addEventListener("click", (e) => {
-                    var x = confirm("vous etês sure");
-                    if (x) {
-                        var elem = "";
-                        elem = e.target.parentElement.parentElement.firstChild;
-                        const formData = new FormData();
-                        formData.append("idPlanInscription", elem.innerText);
-                        formData.append("idMembre", idMembre);
-                        formData.append("action", "ajouterInscription");
-                        console.log(elem.innerText);
-                        xhr.open("POST", "../Controllers/traitementInscription.php");
-                        xhr.send(formData);
-                        // $("#").modal("hide");
-                    }
-
-
-                });
-
-                tableContainer.appendChild(table);
-            }
-        }
         var idInscription;
 
         function fetchMesPlans(response) {
@@ -295,6 +192,7 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
             var id_Inscription = headerRow.insertCell();
             id_Inscription.textContent = 'Id Inscription';
             id_Inscription.classList.add("text-center");
+            id_Inscription.hidden = true;
 
             var nomPlan = headerRow.insertCell();
             nomPlan.textContent = 'Nom du Plan';
@@ -326,6 +224,7 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
                 // Add the plan data to the table cells
                 var cell0 = row.insertCell();
                 cell0.textContent = plan.id_Inscription;
+                cell0.hidden = true;
                 cell0.classList.add("text-center");
 
                 var cell1 = row.insertCell();
@@ -369,6 +268,25 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
                 tableContainer.appendChild(table);
             }
         }
+
+        document.getElementById("btnAfficherMesPlans").addEventListener("click", () => {
+            type = "mesPlansInscriptions";
+            console.log("ok");
+            console.log(idMembre);
+            xhr.addEventListener("readystatechange", () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    response = JSON.parse(xhr.responseText);
+                    fetchMesPlans(response);
+                }
+            });
+            var formData = new FormData();
+            formData.append("idMembre", idMembre);
+            formData.append("action", "afficherMesPlans");
+            xhr.open("POST", "../Controllers/traitementInscription.php");
+            xhr.send(formData);
+        });
+
+
         document.getElementById("confirmDeletePlan").addEventListener("click", () => {
             type = "planInscription";
             xhr.addEventListener("readystatechange", () => {
@@ -388,40 +306,10 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
 
 
         });
-        document.getElementById("btnafficherPlans").addEventListener("click", () => {
-            type = "planInscription";
-            xhr.addEventListener("readystatechange", () => {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    try {
-                        response = JSON.parse(xhr.responseText);
-                        console.log("Parsed response:", response); // Log the parsed response
-                        fetchPlanInscriptionsForMembre(response);
-                    } catch (error) {
-                        //console.error("Error parsing JSON:", error);
-                    }
 
-                }
-            });
-            var formData = new FormData();
-            formData.append("action", "afficherTous");
-            xhr.open("POST", "../Controllers/traitementInscription.php");
-            xhr.send(formData);
-        });
-        document.getElementById("btnAfficherMesPlans").addEventListener("click", () => {
-            console.log("ok");
-            console.log(idMembre);
-            xhr.addEventListener("readystatechange", () => {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    response = JSON.parse(xhr.responseText);
-                    fetchMesPlans(response);
-                }
-            });
-            var formData = new FormData();
-            formData.append("idMembre", idMembre);
-            formData.append("action", "afficherMesPlans");
-            xhr.open("POST", "../Controllers/traitementInscription.php");
-            xhr.send(formData);
-        });
+
+
+
 
 
         // searching
@@ -439,10 +327,16 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
                     // Request succeeded
                     response = JSON.parse(xhr.responseText);
                     fetchPlanInscriptionsForMembre(response);
+                } else if (type === "mesPlansInscriptions") {
+                    console.log(type);
+                    // Request succeeded
+                    response = JSON.parse(xhr.responseText);
+                    fetchMesPlans(response);
                 }
             }
 
             var formData = new FormData();
+            formData.append("idMembre", idMembre);
             formData.append("type", type);
             formData.append("search", searchValue);
             formData.append("action", "search");
@@ -452,13 +346,134 @@ echo "<script> var idMembre=" . $user->getid_membre() . ";</script>";
 
             //
         });
+
+
+
+
+        // -------------------------Plan Inscription -------------------------------//
+
+        function fetchPlanInscriptionsForMembre(response) {
+            console.log("here");
+            var tableContainer = document.getElementById('table-container');
+
+
+            // Clear existing content
+            tableContainer.innerHTML = '';
+
+            // Create and populate the table
+            var table = document.createElement('table');
+            table.classList.add('table', 'table-striped', 'table-hover');
+
+
+            // Create the table header
+            var headerRow = table.insertRow();
+
+            var Id = headerRow.insertCell();
+            Id.textContent = 'Id';
+            Id.classList.add("text-center");
+            Id.hidden = true;
+
+            var Nom = headerRow.insertCell();
+            Nom.textContent = 'Nom du Plan';
+            Nom.classList.add("text-center");
+
+            var description = headerRow.insertCell();
+            description.textContent = 'Description';
+            description.classList.add("text-center");
+
+            var prix = headerRow.insertCell();
+            prix.textContent = 'Prix';
+            prix.classList.add("text-center");
+
+            var Action = headerRow.insertCell();
+            Action.textContent = 'Action';
+            Action.colSpan = 2;
+            Action.classList.add("text-center")
+
+
+
+            // ... add more header cells for other member properties
+
+            for (var i = 0; i < response.length; i++) {
+                var plan = response[i];
+                var row = table.insertRow();
+
+                // Add the plan data to the table cells
+                var cell1 = row.insertCell();
+                cell1.textContent = plan.idPlanInscription;
+                cell1.hidden = true;
+                cell1.classList.add("text-center");
+
+                var cell2 = row.insertCell();
+                cell2.textContent = plan.nom;
+                cell2.classList.add("text-center");
+
+                var cell3 = row.insertCell();
+                cell3.textContent = plan.description;
+                cell3.classList.add("text-center");
+
+                var cell4 = row.insertCell();
+                cell4.textContent = plan.prix;
+                cell4.classList.add("text-center");
+
+                var choixCell = row.insertCell();
+                var choiceButton = document.createElement('button');
+                choiceButton.textContent = 'Choisir';
+                choiceButton.classList.add('btn', 'btn-primary');
+                choixCell.appendChild(choiceButton);
+                choixCell.classList.add('text-center');
+                choiceButton.addEventListener("click", (e) => {
+                    console.log("boutton");
+                    var elem = "";
+                    elem = e.target.parentElement.parentElement.firstChild;
+                    xhr.addEventListener("readystatechange", () => {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            if (xhr.responseText == "failed") {
+                                console.log("echec");
+                                choiceButton.setAttribute('data-toggle', 'modal');
+                                choiceButton.setAttribute('data-target', '#echecChoixPlanInscriptionModal');
+                                $("#echecChoixPlanInscriptionModal").modal("show");
+                            } else {
+                                console.log("succes");
+                                $("#echecChoixPlanInscriptionModal").modal("hide");
+                            }
+                        }
+                    });
+                    const formData = new FormData();
+                    formData.append("idPlanInscription", elem.innerText);
+                    formData.append("idMembre", idMembre);
+                    formData.append("action", "ajouterInscription");
+                    console.log(elem.innerText);
+                    xhr.open("POST", "../Controllers/traitementInscription.php", true);
+                    xhr.send(formData);
+                    $("#choixPlanInscriptionModal").modal("hide");
+
+                });
+
+                tableContainer.appendChild(table);
+            }
+        }
+
+
+
+        document.getElementById("btnafficherPlans").addEventListener("click", () => {
+            type = "planInscription";
+            xhr.addEventListener("readystatechange", () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    try {
+                        response = JSON.parse(xhr.responseText);
+                        console.log("Parsed response:", response); // Log the parsed response
+                        fetchPlanInscriptionsForMembre(response);
+                    } catch (error) {}
+
+                }
+            });
+            var formData = new FormData();
+            formData.append("action", "afficherTous");
+            xhr.open("POST", "../Controllers/traitementInscription.php");
+            xhr.send(formData);
+        });
     </script>
-
-</body>
-
-</html>
-
-
 </body>
 
 </html>

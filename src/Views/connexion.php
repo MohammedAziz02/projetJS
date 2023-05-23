@@ -20,9 +20,9 @@ if (!empty($email) && !empty($motdepasse)) {
         if ($admin->getpassword() != $motdepasse) {
             $message = "mot de passe incorrect ";
         } else {
-            echo "l9ah";
+            // echo "l9ah";
             $_SESSION["user"] = $admin;
-            header("Refresh:1;url=admindashboard.php");
+            header("Location:admindashboard.php");
         }
     } else {
         $member = MembreDao::getMembreByEmail($email);
@@ -30,9 +30,9 @@ if (!empty($email) && !empty($motdepasse)) {
             if ($member->getpassword() != $motdepasse) {
                 $message = "mot de passe incorrect ";
             } else {
-                echo "user";
+                // echo "user";
                 $_SESSION["user"] = $member;
-                header("Refresh:1;url=membredashboard.php");
+                header("Location: membredashboard.php");
             }
         } else {
             $message = "email ou mot de passe non valides";

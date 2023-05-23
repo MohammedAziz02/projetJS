@@ -152,7 +152,8 @@ class MembreDao {
     // Static method to update a member
     public static function updateMembre(Membre $membre) {
         try {
-            $query = "UPDATE membre SET nom = ?, prenom = ?, adresse = ?, email = ?, telephone = ?  , password = ? WHERE id_membre = ?";
+            $query = "UPDATE membre SET nom = ?, prenom = ?, adresse = ?,
+             email = ?, telephone = ?  , password = ? WHERE id_membre = ?";
             $stmt = self::$db->prepare($query);
             $stmt->execute([
                 $membre->getNom(),

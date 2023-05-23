@@ -207,13 +207,6 @@ searchButton.addEventListener("click", (e) => {
 
     xhr.open("POST", "../Controllers/traitementMembre.php");
     xhr.send(formData);
-<<<<<<< HEAD
-}
-=======
 });
-
-
-
->>>>>>> e6659ed2958700f1df365be534cc821bcc07554b
 
 

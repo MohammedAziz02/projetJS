@@ -22,29 +22,33 @@ class InscriptionDAO {
 
     // Static method to create a new member
     public static function createInscription(Inscription $Inscription) {
-        try {
-            if (!isset(self::$db)) {
-                self::initialize();
-            }   
-
-         $query = "INSERT INTO Inscription (id_Membre, id_planInscription,date_inscription,etat) 
-         VALUES (?, ?, ?,? )";
-
-            $stmt = self::$db->prepare($query);
-
-            $stmt->execute([
-                $Inscription->getidmembre(),
-                $Inscription->getidPlanInscription(),
-                $Inscription->getDateInscription(),
-                $Inscription->getEtat()
-            ]);
+        if(InscriptionDAO::isAlreadyChose($Inscription)==0){
+            try {
+                if (!isset(self::$db)) {
+                    self::initialize();
+                }   
             
-            return self::$db->lastInsertId();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            // Handle any errors or exceptions
-            return false;
-        }
+             $query = "INSERT INTO Inscription (id_Membre, id_planInscription,date_inscription,etat) 
+             VALUES (?, ?, ?,? )";
+    
+                $stmt = self::$db->prepare($query);
+    
+                $stmt->execute([
+                    $Inscription->getidmembre(),
+                    $Inscription->getidPlanInscription(),
+                    $Inscription->getDateInscription(),
+                    $Inscription->getEtat()
+                ]);
+                
+                return "success";
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+                // Handle any errors or exceptions
+                return false;
+            } 
+        }else return "failed";
+        
+        
     }
 
     // Static method to retrieve a member by ID
@@ -167,8 +171,76 @@ class InscriptionDAO {
                     array_push($objects, $object);
                 } 
             }
+            //print_r($objects);
             return $objects; 
             
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            // Handle any errors or exceptions
+            return null;
+        }
+    }
+
+    public static function getInscriptionByMembreandPlanInscriptionJoinForSearch($idMembre,$search){
+        try {
+
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "SELECT * FROM Inscription I inner join PlanInscription P 
+            on P.idPlanInscription= I.id_planInscription inner join Membre M
+            on M.id_membre=I.id_Membre where M.id_membre= ? and 
+            ( P.nomPlanInscription like ? or P.prix like ? 
+            or P.description like ? or
+            I.etat like ? or I.date_inscription like ? ); ";
+            $stmt = self::$db->prepare($query);
+            $stmt->execute([$idMembre,"%".$search."%","%".$search."%",
+            "%".$search."%","%".$search."%","%".$search."%"]);
+            // SELECT * FROM Inscription I inner join PlanInscription P 
+            // on P.idPlanInscription= I.id_planInscription inner join Membre M
+            // on M.id_membre=I.id_Membre where M.id_membre= 38 and (P.prix like '%1%' or P.nomPlanInscription like '%ten%');
+            $objects=array();
+            while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+                if ($result) {
+                    $object=["id_Inscription"=>$result['id_Inscription'],
+                    "nomPlanInscription"=>$result['nomPlanInscription'],
+                    "description"=>$result['description'],
+                    "dateInscription"=>$result['date_inscription'],
+                    "etat"=>$result['etat']
+                    ];
+                    array_push($objects, $object);
+                } 
+            }
+            //print_r($objects);
+            return $objects; 
+            
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            // Handle any errors or exceptions
+            return null;
+        }
+    }
+
+    public static function getSumBetweenTwoDates($date1,$date2){
+        try {
+
+            if (!isset(self::$db)) {
+                self::initialize();
+            }
+            $query = "SELECT sum(P.prix) as 'somme' from inscription I 
+            inner join planinscription P on P.idPlanInscription=I.id_planInscription
+             where I.etat=? and I.date_inscription BETWEEN ? and ? ;
+            ";
+            $stmt = self::$db->prepare($query);
+            $stmt->execute(["confirmé",$date1,$date2]);
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($result) {
+                return $result['somme'] ;
+            } else {
+                return -1;
+            }
         } catch (PDOException $e) {
             echo $e->getMessage();
             // Handle any errors or exceptions
@@ -292,5 +364,41 @@ class InscriptionDAO {
         }
     }
 
+      // To test if a member already chose a planInscription
+      public static function isAlreadyChose(Inscription $Inscription){
+        try {
+            if (!isset(self::$db)) {
+                self::initialize();
+            }   
+
+         $query = "SELECT count(*) as res from inscription where id_Membre= ? 
+         and id_planInscription = ?";
+
+            $stmt = self::$db->prepare($query);
+
+            $stmt->execute([
+                $Inscription->getidmembre(),
+                $Inscription->getidPlanInscription()
+            ]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($result){
+                return $result['res'];
+            } 
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            // Handle any errors or exceptions
+            return false;
+        }
+    }
 
 }
+  
+
+//print_r(InscriptionDAO::getInscriptionByMembreandPlanInscriptionJoin(38));
+//echo InscriptionDAO::getSumBetweenTwoDates("2023-05-20","2023-05-23");
+//print_r(InscriptionDAO::getInscriptionByMembreandPlanInscriptionJoinForSearch(38,"tenn"));
+
+//$inscription= new Inscription(38,14);
+//echo InscriptionDAO::isAlreadyChose($inscription);
+
+?>
