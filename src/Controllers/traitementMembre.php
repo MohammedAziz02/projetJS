@@ -15,10 +15,20 @@ $prenom = isset($_POST['prenom']) ? $_POST['prenom'] : NULL;
 $email = isset($_POST['email']) ? $_POST['email'] : NULL;
 $adresse = isset($_POST['adresse']) ? $_POST['adresse'] : NULL;
 $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : NULL;
+$motdepasse = isset($_POST['motdepasse']) ? $_POST['motdepasse'] : NULL;
+
 
 $action = isset($_POST['action']) ? $_POST['action'] : NULL;
 $type = isset($_POST['type']) ? $_POST['type'] : NULL;
 $search = isset($_POST['search']) ? $_POST['search'] : NULL;
+
+//somme entre deux dates
+$date1 = isset($_POST['date1']) ? $_POST['date1'] : NULL;
+$date2 = isset($_POST['date2']) ? $_POST['date2'] : NULL;
+
+$idMembre = isset($_POST['idMembre']) ? $_POST['idMembre'] : NULL;
+
+
 
 
 
@@ -45,6 +55,22 @@ else if($action=='modifier'){
     //$membres=MembreDAO::getMembreByAll("");
     //echo json_encode($membres);
     echo "success";
+}else if($action=='modifierProfil'){
+    $membre=MembreDAO::getMembreById($id);
+    echo $membre;
+    $membre->setnom($nom);
+    $membre->setprenom($prenom);
+    $membre->setemail($email);
+    $membre->settelephone($telephone);
+    $membre->setadresse($adresse);
+    $membre->setpassword($motdepasse);
+    //echo "\n".$membre;
+
+    MembreDAO::updateMembre($membre);
+    //echo "\n".$membre=MembreDAO::getMembreById($id);
+    //$membres=MembreDAO::getMembreByAll("");
+    //echo json_encode($membres);
+    echo "success";
 }
 else if($action=='search'){
     
@@ -58,5 +84,10 @@ else if($action=='search'){
     }else if($type=='inscription'){
         $inscription=InscriptionDAO::getInscriptionByAll($search);
         echo json_encode($inscription);
+    } if($type=='mesPlansInscriptions'){
+        $inscriptions=InscriptionDAO::getInscriptionByMembreandPlanInscriptionJoinForSearch($idMembre,$search);
+        echo json_encode($inscriptions);
     }
+}else if($action=='sommeGain'){
+    echo InscriptionDAO::getSumBetweenTwoDates($date1,$date2);
 }

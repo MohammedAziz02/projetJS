@@ -33,7 +33,6 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-
     <!-- Custom styles for this template-->
     <link href="../../public/css/sb-admin-2.min.css" rel="stylesheet">
 
@@ -62,8 +61,6 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
                         <i class="fa fa-bars"></i>
                     </button>
 
-
-
                     <div class="input-group">
                         <input type="text" class="form-control bg-light border-0 small" name="search" id="search"
                             placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
@@ -77,15 +74,7 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-
-
-
                         <div class="topbar-divider d-none d-sm-block"></div>
-
-
-
-
-
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
@@ -98,8 +87,8 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#modalModifierProfil">
+                                    <i  class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
 
@@ -121,9 +110,7 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
 
                     <div id="table-container">
 
-
                     </div>
-
 
                 </div>
                 <!-- /.container-fluid -->
@@ -140,13 +127,14 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
     <!-- c'est le modal de Logout -->
     <?php require "./LogoutModal.php" ?>
 
-
     <!-- c'est le modal de la formulaire ajouter Plan d'inscription -->
     <?php require "./ModalAjouterPlanInscription.php" ?>
     <?php require "./ModalModifierMembre.php" ?>
 
     <?php require "./ModalChoixPlanInscription.php" ?>
     <?php require "./ModalSupprimerPlanInscription.php" ?>
+    <?php require "./ModalEchecChoixPlanInscription.php" ?>
+    <?php require "./ModalProfilModification.php" ?>
 
     <?php  require "./modifierPlanInscriptionModal.php" ?>
 
@@ -159,9 +147,7 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
 
     <!-- Custom scripts for all pages-->
     <script src="../../public/js/sb-admin-2.min.js"></script>
-    <!--
-    <script src="../../public/js/scriptforPlanInscription.js" type="module"></script>
--->
+
     <script>
     function getXhr() {
         let xhr = null;
@@ -181,7 +167,6 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
         }
         return xhr;
     }
-
 
     const xhr = getXhr();
     /////////////////////////////////////////////////////////////
@@ -207,6 +192,7 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
         var Id = headerRow.insertCell();
         Id.textContent = 'Id';
         Id.classList.add("text-center");
+        Id.hidden=true;
 
         var Nom = headerRow.insertCell();
         Nom.textContent = 'Nom du Plan';
@@ -236,6 +222,7 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
             // Add the plan data to the table cells
             var cell1 = row.insertCell();
             cell1.textContent = plan.idPlanInscription;
+            cell1.hidden=true;
             cell1.classList.add("text-center");
 
             var cell2 = row.insertCell();
@@ -256,28 +243,31 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
             choiceButton.classList.add('btn', 'btn-primary');
             choixCell.appendChild(choiceButton);
             choixCell.classList.add('text-center');
-            //on doit tout d'abord ajouter les attributs pour addentifier le modal de confirmation de suppression
-            choiceButton.setAttribute('data-toggle', 'modal');
-            //choiceButton.setAttribute('data-target', '#choixPlanInscriptionModal');
-            //ici c'est l'évenement de button supprimer qu'on on clique sur la button le modal de confirmation de suppression pop up
-            // il contient déja une button donc on doit faire une nouvelle event sur la button supprimer de button
             choiceButton.addEventListener("click", (e) => {
                 console.log("boutton");
-                //ici on identifie le button supprimer du modal et on fait alors la logique du suppression
-                var confirmsupprimerButton = document.getElementById('confirmchoixPlanInscription');
-                confirmsupprimerButton.addEventListener('click', function() {
-                    var elem = "";
-                    elem = e.target.parentElement.parentElement.firstChild;
-                    const formData = new FormData();
-                    formData.append("idPlanInscription", elem.innerText);
-                    formData.append("idMembre", idMembre);
-                    formData.append("action", "ajouterInscription");
-                    console.log(elem.innerText);
-                    //formData.append("action", "supprimer");
-                    xhr.open("POST", "../Controllers/traitementInscription.php", true);
-                    xhr.send(formData);
-                    $("#choixPlanInscriptionModal").modal("hide");
+                var elem = "";
+                elem = e.target.parentElement.parentElement.firstChild;
+                xhr.addEventListener("readystatechange", () => {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        if (xhr.responseText == "failed") {
+                            console.log("echec");
+                            choiceButton.setAttribute('data-toggle', 'modal');
+                            choiceButton.setAttribute('data-target', '#echecChoixPlanInscriptionModal');
+                            $("#echecChoixPlanInscriptionModal").modal("show");
+                        } else {
+                            console.log("succes");
+                            $("#echecChoixPlanInscriptionModal").modal("hide");
+                        }
+                    }
                 });
+                const formData = new FormData();
+                formData.append("idPlanInscription", elem.innerText);
+                formData.append("idMembre", idMembre);
+                formData.append("action", "ajouterInscription");
+                console.log(elem.innerText);
+                xhr.open("POST", "../Controllers/traitementInscription.php", true);
+                xhr.send(formData);
+                $("#choixPlanInscriptionModal").modal("hide");
 
             });
 
@@ -304,6 +294,7 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
         var id_Inscription = headerRow.insertCell();
         id_Inscription.textContent = 'Id Inscription';
         id_Inscription.classList.add("text-center");
+        id_Inscription.hidden=true;
 
         var nomPlan = headerRow.insertCell();
         nomPlan.textContent = 'Nom du Plan';
@@ -335,6 +326,7 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
             // Add the plan data to the table cells
             var cell0 = row.insertCell();
             cell0.textContent = plan.id_Inscription;
+            cell0.hidden=true;
             cell0.classList.add("text-center");
 
             var cell1 = row.insertCell();
@@ -394,8 +386,6 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
         xhr.send(formData);
         $("#supprimerPlanModal").modal("hide");
 
-
-
     });
     document.getElementById("btnafficherPlans").addEventListener("click", () => {
         type = "planInscription";
@@ -405,9 +395,7 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
                     response = JSON.parse(xhr.responseText);
                     console.log("Parsed response:", response); // Log the parsed response
                     fetchPlanInscriptionsForMembre(response);
-                } catch (error) {
-                    //console.error("Error parsing JSON:", error);
-                }
+                } catch (error) {}
 
             }
         });
@@ -417,6 +405,7 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
         xhr.send(formData);
     });
     document.getElementById("btnAfficherMesPlans").addEventListener("click", () => {
+        type = "mesPlansInscriptions";
         console.log("ok");
         console.log(idMembre);
         xhr.addEventListener("readystatechange", () => {
@@ -431,7 +420,6 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
         xhr.open("POST", "../Controllers/traitementInscription.php");
         xhr.send(formData);
     });
-
 
     // searching
     var type = "planInscription";
@@ -448,10 +436,16 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
                 // Request succeeded
                 response = JSON.parse(xhr.responseText);
                 fetchPlanInscriptionsForMembre(response);
+            } else if (type === "mesPlansInscriptions") {
+                console.log(type);
+                // Request succeeded
+                response = JSON.parse(xhr.responseText);
+                fetchMesPlans(response);
             }
         }
 
         var formData = new FormData();
+        formData.append("idMembre", idMembre);
         formData.append("type", type);
         formData.append("search", searchValue);
         formData.append("action", "search");
@@ -462,12 +456,5 @@ echo "<script> var idMembre=". $user->getid_membre(). ";</script>";
         //
     });
     </script>
-
 </body>
-
-</html>
-
-
-</body>
-
 </html>

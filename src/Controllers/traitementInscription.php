@@ -15,7 +15,7 @@ $id = isset($_POST['id']) ? $_POST['id'] : NULL;
 
 if ($action == "ajouterInscription") {
     $inscription = new Inscription($idMembre, $idPlanInscription);
-    InscriptionDAO::createInscription($inscription);
+    echo InscriptionDAO::createInscription($inscription);   
     //echo "success";
 } elseif ($action == "afficherTous") {
     $inscriptions = PlanInscriptionDAO::getPlanInscriptionByAll("");
@@ -28,20 +28,5 @@ if ($action == "ajouterInscription") {
     $inscriptions = InscriptionDAO::getInscriptionByMembreandPlanInscriptionJoin($idMembre);
     echo json_encode($inscriptions);
 
-} elseif ($action == "modifierplan") {
-    
-    $planinscription = PlanInscriptionDAO::getPlanInscriptionById($id);
-    $planinscription->setDescription($descriptionplan);
-    $planinscription->setPrix($prixplan);
-    $planinscription->setNom($nomplan);
-    PlanInscriptionDAO::updatePlanInscription($planinscription);
-
-    echo "success";
-}
-elseif($action=="supprimer"){
-    PlanInscriptionDAO::deletePlanInscription($id);
-    echo "success";
-}else if($action=='afficherSelonId'){
-
-}
+} 
 //print_r(InscriptionDAO::getInscriptionByMembreandPlanInscriptionJoin(38));

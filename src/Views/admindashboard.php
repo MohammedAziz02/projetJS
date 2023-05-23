@@ -89,7 +89,8 @@ if(!isset($_SESSION['user'])){
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo  $user->getNom()." ".$user->getPrenom()   ?></span>
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo  $user->getNom()." ".$user->getPrenom()   ?></span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -532,6 +533,31 @@ if(!isset($_SESSION['user'])){
         xhr.send(formData);
 
         //
+    });
+
+    var btnGain = document.getElementById("btnGain");
+    btnGain.addEventListener("click", () => {
+
+        if (date1.value && date1.value) {
+            xhr.addEventListener("readystatechange",()=>{
+                if(xhr.readyState==4 && xhr.status==200){
+                    var tableContainer = document.getElementById('table-container');
+                    tableContainer.innerHTML="";
+                    tableContainer.innerHTML=xhr.responseText;
+                    
+            };
+            });
+            
+
+            var formData = new FormData();
+            formData.append("action", "sommeGain");
+            formData.append("date1", date1.value);
+            formData.append("date2", date2.value);
+            
+            xhr.open("POST","../Controllers/traitementMembre.php");
+            xhr.send(formData);
+        }
+
     });
     </script>
 
