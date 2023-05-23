@@ -4,7 +4,7 @@ const xhr = getXhr();
 export function getAllInscriptionsPlans() {
     const formData = new FormData();
     formData.append("action", 'afficherTous');
-    xhr.open("POST", "../Controllers/traitementPlanInscription.php", true);
+    xhr.open("POST", "../Controllers/traitementPlanInscription.php");
     xhr.send(formData);
     xhr.addEventListener("readystatechange", () => {
         if (xhr.readyState == 4 && xhr.status == 200) {
